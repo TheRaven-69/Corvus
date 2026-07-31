@@ -1,3 +1,9 @@
 .agents
 AGENTS.md
 
+/backend/.venv/
+__pycache__/
+*.py[cod]
+/backend/.pytest_cache/
+/backend/.ruff_cache/
+/backend/.env
