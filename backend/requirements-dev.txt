@@ -1,5 +1,7 @@
 -r requirements.txt
-pytest
 httpx
 httpx2
+pre-commit
+pytest
+pytest-asyncio
 ruff
