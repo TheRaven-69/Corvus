@@ -1,0 +1,2 @@
+target-version = "py313"
+src = ["backend/app"]
