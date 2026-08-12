@@ -4,3 +4,7 @@ uvicorn[standard]
 psycopg[binary]
 pydantic-settings
 sqlalchemy
+pwdlib[argon2]
+PyJWT
+python-multipart
+email-validator
