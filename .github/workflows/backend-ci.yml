@@ -24,7 +24,8 @@ jobs:
         working-directory: backend
 
     env:
-      CORVUS_DATABASE_URL: postgresql+psycopg://corvus:password@localhost:5432/corvus
+      CORVUS_DATABASE_URL: sqlite+aiosqlite:///:memory:
+      CORVUS_JWT_SECRET_KEY: ci-only-secret-key-with-at-least-32-bytes
 
     steps:
       - name: Check out repository
