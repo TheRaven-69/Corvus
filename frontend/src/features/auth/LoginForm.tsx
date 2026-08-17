@@ -1,4 +1,6 @@
 import { useState, type FormEvent } from 'react'
+import type { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 import { getCurrentUser, login, type User } from '../../api/auth'
 import { ApiError } from '../../api/http'
@@ -9,16 +11,16 @@ type LoginFormProps = {
   onAuthenticated: (user: User) => void
 }
 
-function readableLoginError(error: unknown): string {
+function readableLoginError(error: unknown, t: TFunction): string {
   if (error instanceof ApiError && error.status === 401) {
-    return 'Incorrect email, username, or password.'
+    return t('auth.errors.invalidCredentials')
   }
 
   if (error instanceof ApiError) {
-    return `The server could not complete the request: ${error.message}`
+    return t('auth.errors.server', { message: error.message })
   }
 
-  return 'Could not connect to the server. Please try again.'
+  return t('auth.errors.connection')
 }
 
 export function LoginForm({
@@ -26,6 +28,7 @@ export function LoginForm({
   successMessage = null,
   onAuthenticated,
 }: LoginFormProps) {
+  const { t } = useTranslation()
   const [loginValue, setLoginValue] = useState(initialLogin)
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -41,7 +44,7 @@ export function LoginForm({
       const user = await getCurrentUser(token.access_token)
       onAuthenticated(user)
     } catch (error) {
-      setErrorMessage(readableLoginError(error))
+      setErrorMessage(readableLoginError(error, t))
     } finally {
       setIsSubmitting(false)
     }
@@ -49,11 +52,8 @@ export function LoginForm({
 
   return (
     <>
-      <p className="eyebrow">Your training space</p>
-      <h2>Sign in to Corvus</h2>
-      <p className="auth-card__hint">
-        Use the email or username you chose during registration.
-      </p>
+      <h2>{t('auth.login.title')}</h2>
+      <p className="auth-card__hint">{t('auth.login.hint')}</p>
 
       {successMessage ? (
         <p className="form-success" role="status">
@@ -63,7 +63,7 @@ export function LoginForm({
 
       <form className="auth-form" onSubmit={handleSubmit}>
         <div className="form-field">
-          <label htmlFor="login">Email or username</label>
+          <label htmlFor="login">{t('auth.login.loginLabel')}</label>
           <input
             id="login"
             name="login"
@@ -76,7 +76,7 @@ export function LoginForm({
         </div>
 
         <div className="form-field">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">{t('auth.login.passwordLabel')}</label>
           <input
             id="password"
             name="password"
@@ -96,7 +96,7 @@ export function LoginForm({
         ) : null}
 
         <button className="submit-button" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Signing in…' : 'Sign in'}
+          {isSubmitting ? t('auth.login.submitting') : t('auth.signIn')}
         </button>
       </form>
     </>

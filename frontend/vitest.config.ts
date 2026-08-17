@@ -5,6 +5,11 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'jsdom',
+    environmentOptions: {
+      jsdom: {
+        url: 'http://localhost/',
+      },
+    },
     pool: 'threads',
     maxWorkers: 1,
     setupFiles: ['./src/test/setup.ts'],

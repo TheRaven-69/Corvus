@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import type { User } from '../../api/auth'
 import { LoginForm } from './LoginForm'
@@ -11,6 +12,7 @@ type AuthPanelProps = {
 }
 
 export function AuthPanel({ onAuthenticated }: AuthPanelProps) {
+  const { t } = useTranslation()
   const [mode, setMode] = useState<AuthMode>('login')
   const [registeredUsername, setRegisteredUsername] = useState('')
 
@@ -21,48 +23,47 @@ export function AuthPanel({ onAuthenticated }: AuthPanelProps) {
 
   return (
     <>
-      <div className="auth-tabs" aria-label="Authentication">
+      <div className="auth-tabs" aria-label={t('auth.tabsLabel')}>
         <button
           type="button"
           className={mode === 'login' ? 'auth-tab auth-tab--active' : 'auth-tab'}
-          aria-label="Show sign-in form"
+          aria-label={t('auth.showLogin')}
           aria-pressed={mode === 'login'}
           onClick={() => setMode('login')}
         >
-          Sign in
+          {t('auth.signIn')}
         </button>
         <button
           type="button"
           className={
             mode === 'register' ? 'auth-tab auth-tab--active' : 'auth-tab'
           }
-          aria-label="Show registration form"
+          aria-label={t('auth.showRegistration')}
           aria-pressed={mode === 'register'}
           onClick={() => setMode('register')}
         >
-          Register
+          {t('auth.register')}
         </button>
       </div>
 
       {mode === 'login' ? (
-        <LoginForm
-          initialLogin={registeredUsername}
-          successMessage={
-            registeredUsername
-              ? 'Account created. You can now sign in to Corvus.'
-              : null
-          }
-          onAuthenticated={onAuthenticated}
-        />
+        <div className="auth-view" key="login">
+          <LoginForm
+            initialLogin={registeredUsername}
+            successMessage={
+              registeredUsername
+                ? t('auth.accountCreated')
+                : null
+            }
+            onAuthenticated={onAuthenticated}
+          />
+        </div>
       ) : (
-        <>
-          <p className="eyebrow">New account</p>
-          <h2>Create your profile</h2>
-          <p className="auth-card__hint">
-            Fill in the short form to start planning your workouts.
-          </p>
+        <div className="auth-view" key="register">
+          <h2>{t('auth.registration.title')}</h2>
+          <p className="auth-card__hint">{t('auth.registration.hint')}</p>
           <RegisterForm onRegistered={showLoginAfterRegistration} />
-        </>
+        </div>
       )}
     </>
   )
