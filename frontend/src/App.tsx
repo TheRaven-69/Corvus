@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import './App.css'
 
 import {
   logout,
@@ -7,9 +9,11 @@ import {
 } from './api/auth'
 import { AuthPanel } from './features/auth/AuthPanel'
 import { Dashboard } from './features/dashboard/Dashboard'
-import './App.css'
+import { CorvusBrand } from './components/CorvusBrand'
+import { LanguageSwitcher } from './components/LanguageSwitcher'
 
 function App() {
+  const { t } = useTranslation()
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [isCheckingSession, setIsCheckingSession] = useState(true)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
@@ -49,7 +53,7 @@ function App() {
       await logout()
       setCurrentUser(null)
     } catch {
-      setLogoutError('Could not log out. Check your connection and try again.')
+      setLogoutError(t('auth.errors.logout'))
     } finally {
       setIsLoggingOut(false)
     }
@@ -69,19 +73,22 @@ function App() {
   return (
     <main className="app-shell">
       <section className="intro" aria-labelledby="welcome-title">
-        <p className="eyebrow">Corvus</p>
-        <h1 id="welcome-title">Training without the clutter</h1>
-        <p className="intro__copy">
-          Plan your workouts, record completed sets, and follow your progress
-          in one focused place.
-        </p>
+        <div className="intro__topline">
+          <CorvusBrand />
+          <LanguageSwitcher />
+        </div>
+        <div className="intro__body">
+          <h1 id="welcome-title">{t('landing.title')}</h1>
+          <p className="intro__copy">{t('landing.copy')}</p>
+        </div>
+        <span className="intro__measure" aria-hidden="true" />
       </section>
 
       <section className="auth-card" aria-live="polite">
         {isCheckingSession ? (
           <div className="session-loading" role="status">
             <span className="spinner" aria-hidden="true" />
-            <p>Checking your session…</p>
+            <p>{t('landing.checkingSession')}</p>
           </div>
         ) : (
           <AuthPanel onAuthenticated={setCurrentUser} />

@@ -1,27 +1,46 @@
 :root {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
-  color: #233028;
-  background:
-    radial-gradient(circle at 12% 15%, rgb(193 233 204 / 70%), transparent 28rem),
-    #f3f6f1;
+  font-family: "Roboto Condensed Variable", "Arial Narrow", Arial, sans-serif;
+  color: #f1f3ef;
+  background: #090b0b;
+  color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --heading: #102018;
-  --muted: #5f6f65;
-  --surface: #ffffff;
-  --border: #dce5de;
-  --border-strong: #b8c7bd;
-  --accent: #167648;
-  --accent-hover: #0e5f38;
-  --accent-bg: rgb(22 118 72 / 10%);
-  --focus-ring: rgb(22 118 72 / 20%);
-  --danger: #9b2c2c;
-  --danger-border: #efb5b5;
-  --danger-surface: #fff1f1;
+  --corvus-canvas: #090b0b;
+  --corvus-rail: #0d100f;
+  --corvus-surface: #121615;
+  --corvus-surface-raised: #171c1a;
+  --corvus-surface-input: #0c0f0e;
+  --corvus-line: #29302d;
+  --corvus-line-strong: #3a443f;
+  --corvus-text: #f1f3ef;
+  --corvus-muted: #9aa49f;
+  --corvus-faint: #89938e;
+  --corvus-accent: #63d982;
+  --corvus-accent-strong: #7ee397;
+  --corvus-accent-dark: #183c25;
+  --corvus-focus: rgb(99 217 130 / 30%);
+  --corvus-danger: #ff8f8f;
+  --corvus-danger-surface: #2b1718;
+  --corvus-danger-line: #6f3437;
+  --corvus-success-surface: #10281a;
+  --corvus-radius-sm: 0.5rem;
+  --corvus-radius-md: 0.75rem;
+  --corvus-radius-lg: 1rem;
+  --corvus-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+* {
+  box-sizing: border-box;
+  scrollbar-color: var(--corvus-line-strong) var(--corvus-canvas);
+  scrollbar-width: thin;
+}
+
+html {
+  min-width: 20rem;
+  background: var(--corvus-canvas);
 }
 
 body {
@@ -35,6 +54,25 @@ input {
   font: inherit;
 }
 
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input {
+  caret-color: var(--corvus-accent);
+}
+
+::selection {
+  color: #071009;
+  background: var(--corvus-accent);
+}
+
+:focus-visible {
+  outline: 0.18rem solid var(--corvus-focus);
+  outline-offset: 0.15rem;
+}
+
 strong {
-  color: var(--heading);
+  color: var(--corvus-text);
 }

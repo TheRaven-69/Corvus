@@ -1,4 +1,6 @@
 import { useState, type FormEvent } from 'react'
+import type { TFunction } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 import { register } from '../../api/auth'
 import { ApiError } from '../../api/http'
@@ -7,33 +9,34 @@ type RegisterFormProps = {
   onRegistered: (username: string) => void
 }
 
-function readableRegistrationError(error: unknown): string {
+function readableRegistrationError(error: unknown, t: TFunction): string {
   if (
     error instanceof ApiError &&
     error.message === 'Email is already registered'
   ) {
-    return 'An account with this email already exists.'
+    return t('auth.errors.emailTaken')
   }
 
   if (
     error instanceof ApiError &&
     error.message === 'Username is already registered'
   ) {
-    return 'This username is already taken.'
+    return t('auth.errors.usernameTaken')
   }
 
   if (error instanceof ApiError && error.status === 422) {
-    return 'Check that every field is filled in correctly.'
+    return t('auth.errors.invalidFields')
   }
 
   if (error instanceof ApiError) {
-    return `The server could not complete the request: ${error.message}`
+    return t('auth.errors.server', { message: error.message })
   }
 
-  return 'Could not connect to the server. Please try again.'
+  return t('auth.errors.connection')
 }
 
 export function RegisterForm({ onRegistered }: RegisterFormProps) {
+  const { t } = useTranslation()
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
   const [firstName, setFirstName] = useState('')
@@ -50,7 +53,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
 
     if (password !== passwordConfirmation) {
       setPasswordMismatch(true)
-      setErrorMessage('Passwords do not match.')
+      setErrorMessage(t('auth.errors.passwordMismatch'))
       return
     }
 
@@ -67,7 +70,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
       })
       onRegistered(user.username)
     } catch (error) {
-      setErrorMessage(readableRegistrationError(error))
+      setErrorMessage(readableRegistrationError(error, t))
     } finally {
       setIsSubmitting(false)
     }
@@ -77,7 +80,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
     <form className="auth-form" onSubmit={handleSubmit}>
       <div className="form-row">
         <div className="form-field">
-          <label htmlFor="first-name">First name</label>
+          <label htmlFor="first-name">{t('auth.registration.firstName')}</label>
           <input
             id="first-name"
             name="firstName"
@@ -90,7 +93,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
         </div>
 
         <div className="form-field">
-          <label htmlFor="last-name">Last name</label>
+          <label htmlFor="last-name">{t('auth.registration.lastName')}</label>
           <input
             id="last-name"
             name="lastName"
@@ -104,7 +107,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
       </div>
 
       <div className="form-field">
-        <label htmlFor="register-email">Email</label>
+        <label htmlFor="register-email">{t('auth.registration.email')}</label>
         <input
           id="register-email"
           name="email"
@@ -118,7 +121,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
       </div>
 
       <div className="form-field">
-        <label htmlFor="register-username">Username</label>
+        <label htmlFor="register-username">{t('auth.registration.username')}</label>
         <input
           id="register-username"
           name="username"
@@ -129,15 +132,15 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
           minLength={3}
           maxLength={50}
           pattern="[a-zA-Z0-9_]+"
-          title="Use only Latin letters, numbers, and underscores"
+          title={t('auth.registration.usernameTitle')}
         />
         <span className="field-hint">
-          3–50 characters: Latin letters, numbers, and underscores.
+          {t('auth.registration.usernameHint')}
         </span>
       </div>
 
       <div className="form-field">
-        <label htmlFor="register-password">Password</label>
+        <label htmlFor="register-password">{t('auth.registration.password')}</label>
         <input
           id="register-password"
           name="password"
@@ -159,12 +162,12 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
           maxLength={128}
         />
         <span className="field-hint" id="password-requirements">
-          At least 8 characters.
+          {t('auth.registration.passwordHint')}
         </span>
       </div>
 
       <div className="form-field">
-        <label htmlFor="password-confirmation">Confirm password</label>
+        <label htmlFor="password-confirmation">{t('auth.registration.confirmPassword')}</label>
         <input
           id="password-confirmation"
           name="passwordConfirmation"
@@ -189,7 +192,7 @@ export function RegisterForm({ onRegistered }: RegisterFormProps) {
       ) : null}
 
       <button className="submit-button" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? 'Creating account…' : 'Create account'}
+        {isSubmitting ? t('auth.registration.submitting') : t('auth.registration.submit')}
       </button>
     </form>
   )

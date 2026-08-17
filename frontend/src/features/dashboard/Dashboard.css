@@ -1,0 +1,661 @@
+.fitness-dashboard {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 14.5rem minmax(0, 1fr);
+  color: var(--corvus-text);
+  background: var(--corvus-canvas);
+}
+
+.fitness-sidebar {
+  min-height: 100dvh;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  padding: 1.35rem 0 1rem;
+  border-right: 1px solid var(--corvus-line);
+  background: var(--corvus-rail);
+}
+
+.fitness-brand {
+  min-height: 3.25rem;
+  display: flex;
+  align-items: center;
+  padding: 0 1.2rem 1.3rem;
+  border-bottom: 1px solid var(--corvus-line);
+}
+
+.fitness-nav {
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 1.1rem;
+  padding-inline: 0.65rem;
+}
+
+.fitness-nav__label {
+  margin: 1.25rem 0 0.45rem;
+  padding-inline: 0.65rem;
+  color: var(--corvus-faint);
+  font-size: 0.62rem;
+  font-weight: 760;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fitness-nav__link {
+  min-height: 2.75rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-inline: 0.75rem;
+  border-radius: var(--corvus-radius-sm);
+  color: #b7c0bb;
+  font-size: 0.78rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.fitness-nav__link--active {
+  color: var(--corvus-text);
+  background: var(--corvus-surface-raised);
+}
+
+.fitness-nav__link--active::before {
+  content: '';
+  width: 0.18rem;
+  height: 1.25rem;
+  position: absolute;
+  left: 0;
+  border-radius: 999px;
+  background: var(--corvus-accent);
+}
+
+.fitness-nav__link--active .dashboard-icon {
+  color: var(--corvus-accent);
+}
+
+.fitness-nav__link--disabled {
+  cursor: not-allowed;
+  color: var(--corvus-faint);
+}
+
+.dashboard-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 auto;
+}
+
+.fitness-sidebar__footer {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-inline: 0.65rem;
+}
+
+.fitness-profile {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 0.7rem 0;
+  border-top: 1px solid var(--corvus-line);
+}
+
+.fitness-profile__avatar {
+  width: 2.15rem;
+  height: 2.15rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid #376846;
+  border-radius: var(--corvus-radius-sm);
+  color: var(--corvus-accent);
+  background: var(--corvus-accent-dark);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.fitness-profile strong,
+.fitness-profile span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fitness-profile strong {
+  font-size: 0.73rem;
+}
+
+.fitness-profile div span {
+  margin-top: 0.12rem;
+  color: var(--corvus-faint);
+  font-size: 0.66rem;
+}
+
+.fitness-profile button {
+  grid-column: 1 / -1;
+  min-height: 2.25rem;
+  margin-top: 0.3rem;
+  border: 1px solid var(--corvus-line);
+  border-radius: var(--corvus-radius-sm);
+  color: var(--corvus-muted);
+  background: var(--corvus-surface-input);
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 140ms var(--corvus-ease-out),
+    color 140ms var(--corvus-ease-out),
+    transform 100ms var(--corvus-ease-out);
+}
+
+.fitness-profile button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.fitness-main {
+  min-width: 0;
+  padding: 2rem clamp(1.25rem, 3vw, 3rem) 3rem;
+  background:
+    linear-gradient(120deg, rgb(99 217 130 / 3%), transparent 28rem),
+    var(--corvus-canvas);
+}
+
+.fitness-topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--corvus-line-strong);
+}
+
+.fitness-topbar h1 {
+  max-width: 18ch;
+  margin: 0;
+  color: var(--corvus-text);
+  font-size: clamp(2.1rem, 4vw, 3.7rem);
+  font-weight: 760;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.fitness-topbar div > span {
+  display: block;
+  margin-top: 0.65rem;
+  color: var(--corvus-muted);
+  font-size: 0.86rem;
+}
+
+.fitness-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fitness-topbar .language-switcher {
+  background: var(--corvus-rail);
+}
+
+.icon-action,
+.fitness-primary {
+  border-radius: var(--corvus-radius-sm);
+  font: inherit;
+}
+
+.icon-action {
+  width: 2.55rem;
+  height: 2.55rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--corvus-line);
+  color: var(--corvus-muted);
+  background: var(--corvus-surface-input);
+}
+
+.fitness-primary {
+  min-height: 2.55rem;
+  padding-inline: 1.15rem;
+  border: 1px solid #315b3d;
+  color: #a8b8ad;
+  background: #1a2a20;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.icon-action:disabled,
+.fitness-primary:disabled,
+.dark-empty button:disabled {
+  cursor: not-allowed;
+}
+
+.icon-action:disabled {
+  opacity: 0.55;
+}
+
+.fitness-error {
+  margin-bottom: 1rem;
+}
+
+.fitness-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.dark-card {
+  min-width: 0;
+  border: 1px solid var(--corvus-line);
+  border-radius: var(--corvus-radius-md);
+  background: var(--corvus-surface);
+  box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 12%);
+}
+
+.dark-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  color: #dce2de;
+  font-size: 0.68rem;
+  font-weight: 760;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dark-card h2 .dashboard-icon {
+  color: var(--corvus-accent);
+}
+
+.weekly-card {
+  grid-column: span 8;
+  min-height: 13.5rem;
+  padding: 1.3rem 1.4rem;
+  background: var(--corvus-surface-raised);
+}
+
+.weekly-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 2rem;
+}
+
+.weekly-metrics article {
+  min-width: 0;
+  min-height: 6.5rem;
+  padding-inline: 1rem;
+  border-right: 1px solid var(--corvus-line-strong);
+}
+
+.weekly-metrics article:first-child { padding-left: 0; }
+.weekly-metrics article:last-child { border-right: 0; }
+
+.weekly-metrics span,
+.weekly-metrics small {
+  display: block;
+}
+
+.weekly-metrics span {
+  color: var(--corvus-muted);
+  font-size: 0.64rem;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.weekly-metrics strong {
+  display: block;
+  margin-top: 0.65rem;
+  font-size: clamp(1.9rem, 3vw, 2.7rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.weekly-metrics small {
+  margin-top: 0.7rem;
+  color: #75a481;
+  font-size: 0.65rem;
+}
+
+.up-next-card {
+  grid-column: span 4;
+  min-height: 13.5rem;
+  padding: 1.3rem;
+}
+
+.volume-card {
+  grid-column: span 8;
+  min-height: 18rem;
+  padding: 1.3rem 1.4rem;
+}
+
+.progress-card {
+  grid-column: span 4;
+  min-height: 18rem;
+  padding: 1.3rem;
+}
+
+.recent-card {
+  grid-column: span 7;
+  min-height: 14rem;
+  padding: 1.3rem 1.4rem;
+}
+
+.achievement-card {
+  grid-column: span 5;
+  min-height: 14rem;
+  padding: 1.3rem 1.4rem;
+  background:
+    linear-gradient(135deg, rgb(99 217 130 / 4%), transparent 48%),
+    var(--corvus-surface);
+}
+
+.dark-empty {
+  min-height: 10rem;
+  display: grid;
+  place-content: center start;
+  justify-items: start;
+  padding: 1rem 0;
+  text-align: left;
+}
+
+.dark-empty--compact { min-height: 8rem; }
+
+.dark-empty > .dashboard-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--corvus-accent);
+}
+
+.dark-empty strong {
+  margin-top: 0.55rem;
+  font-size: 0.9rem;
+}
+
+.dark-empty p {
+  max-width: 26rem;
+  margin: 0.42rem 0 0;
+  color: var(--corvus-muted);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+
+.dark-empty button {
+  width: 100%;
+  max-width: 17rem;
+  min-height: 2.4rem;
+  margin-top: 1rem;
+  border: 1px solid var(--corvus-line-strong);
+  border-radius: var(--corvus-radius-sm);
+  color: #91a197;
+  background: var(--corvus-surface-raised);
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.dark-card__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dark-card__heading > span {
+  color: var(--corvus-faint);
+  font-size: 0.64rem;
+}
+
+.volume-chart {
+  min-height: 12.5rem;
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 0.7rem;
+  margin-top: 1.2rem;
+}
+
+.chart-calibration {
+  grid-column: 1 / -1;
+  min-height: 1.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 0.35rem;
+  color: var(--corvus-faint);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.chart-calibration i {
+  height: 0.45rem;
+  border-inline: 1px solid var(--corvus-line-strong);
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(12.5% - 1px),
+    var(--corvus-line-strong) calc(12.5% - 1px),
+    var(--corvus-line-strong) 12.5%
+  );
+}
+
+.chart-y {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 1.5rem;
+  color: var(--corvus-faint);
+  font-size: 0.62rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-area {
+  min-width: 0;
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.chart-area > i {
+  width: 100%;
+  position: absolute;
+  left: 0;
+  border-top: 1px dashed var(--corvus-line);
+}
+
+.chart-area > i:nth-child(1) { top: 0; }
+.chart-area > i:nth-child(2) { top: 23%; }
+.chart-area > i:nth-child(3) { top: 46%; }
+.chart-area > i:nth-child(4) { top: 69%; }
+.chart-area > i:nth-child(5) { top: 92%; }
+
+.chart-area svg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.chart-placeholder {
+  fill: none;
+  stroke: #3d5e46;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 8;
+}
+
+.chart-days {
+  display: flex;
+  justify-content: space-between;
+  color: var(--corvus-faint);
+  font-size: 0.62rem;
+}
+
+.progress-list {
+  display: grid;
+  margin-top: 1.4rem;
+}
+
+.progress-list div {
+  min-height: 3.65rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.7rem;
+  border-bottom: 1px solid var(--corvus-line);
+  font-size: 0.72rem;
+}
+
+.progress-list div:last-child { border-bottom: 0; }
+.progress-list span { color: #d2d8d4; }
+.progress-list strong { color: var(--corvus-accent); }
+
+.progress-list small {
+  grid-column: 1 / -1;
+  margin-top: -0.85rem;
+  color: var(--corvus-faint);
+}
+
+.achievement-badge {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid #376846;
+  border-radius: var(--corvus-radius-sm);
+  color: var(--corvus-accent);
+  background: var(--corvus-accent-dark);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .fitness-profile button:hover:not(:disabled) {
+    border-color: var(--corvus-line-strong);
+    color: var(--corvus-text);
+  }
+}
+
+@media (max-width: 64rem) {
+  .fitness-dashboard {
+    grid-template-columns: 12.5rem minmax(0, 1fr);
+  }
+
+  .fitness-grid { grid-template-columns: 1fr; }
+
+  .weekly-card,
+  .up-next-card,
+  .volume-card,
+  .progress-card,
+  .recent-card,
+  .achievement-card {
+    grid-column: 1;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 48rem) {
+  .fitness-dashboard { display: block; }
+
+  .fitness-sidebar {
+    min-height: auto;
+    position: static;
+    padding: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--corvus-line-strong);
+  }
+
+  .fitness-brand {
+    min-height: 3.75rem;
+    padding: 0 1rem;
+    border-bottom: 0;
+  }
+
+  .fitness-nav {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0;
+    padding: 0.45rem 0.75rem;
+    overflow-x: auto;
+    border-top: 1px solid var(--corvus-line);
+  }
+
+  .fitness-nav__label,
+  .fitness-nav__link--disabled,
+  .fitness-sidebar__footer {
+    display: none;
+  }
+
+  .fitness-nav__link {
+    min-width: max-content;
+    min-height: 2.55rem;
+  }
+
+  .fitness-nav__link--active::before { display: none; }
+
+  .fitness-main { padding: 1.2rem 0.9rem 2rem; }
+
+  .fitness-topbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1.2rem;
+  }
+
+  .fitness-topbar h1 {
+    max-width: 13ch;
+    font-size: clamp(2rem, 11vw, 2.8rem);
+  }
+
+  .fitness-topbar__actions {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.6rem;
+  }
+
+  .icon-action { display: none; }
+  .fitness-primary { width: 100%; }
+
+  .fitness-grid { gap: 0.65rem; }
+
+  .weekly-card,
+  .up-next-card,
+  .volume-card,
+  .progress-card,
+  .recent-card,
+  .achievement-card {
+    padding: 1.15rem 1rem;
+  }
+
+  .weekly-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 0;
+    margin-top: 1.4rem;
+  }
+
+  .weekly-metrics article {
+    min-height: 6rem;
+    padding: 0 0.75rem 0.8rem;
+    border-bottom: 1px solid var(--corvus-line-strong);
+  }
+
+  .weekly-metrics article:nth-child(2) { border-right: 0; }
+  .weekly-metrics article:nth-child(3) { padding-left: 0; }
+  .weekly-metrics strong { font-size: 2rem; }
+  .dark-empty { min-height: 8rem; }
+  .volume-card { min-height: 16rem; }
+
+  .volume-chart {
+    min-height: 10rem;
+    grid-template-columns: 2rem 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fitness-profile button { transform: none !important; }
+}

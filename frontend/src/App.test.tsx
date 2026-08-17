@@ -1,8 +1,9 @@
 import { cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import App from './App'
+import i18n from './i18n'
 
 const userResponse = {
   id: '7bed0f31-0bb0-4957-881b-3c57aa2a8044',
@@ -30,7 +31,36 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
+beforeEach(async () => {
+  window.localStorage.clear()
+  document.documentElement.lang = 'en'
+  await i18n.changeLanguage('en')
+})
+
 describe('authentication flow', () => {
+  it('switches to Ukrainian and remembers the selected language', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+      jsonResponse({ detail: 'Invalid refresh token' }, 401),
+    )
+
+    render(<App />)
+
+    await user.click(
+      await screen.findByRole('button', { name: 'Ukrainian' }),
+    )
+
+    expect(
+      await screen.findByRole('heading', { name: 'Тренування без хаосу' }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Українська' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(document.documentElement).toHaveAttribute('lang', 'uk')
+    expect(window.localStorage.getItem('corvus.language')).toBe('uk')
+  })
+
   it('restores an existing session when the application opens', async () => {
     const fetchMock = vi
       .spyOn(globalThis, 'fetch')

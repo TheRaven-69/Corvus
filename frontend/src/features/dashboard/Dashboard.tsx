@@ -1,6 +1,20 @@
-import type { ReactNode } from 'react'
+import {
+  BarbellIcon,
+  CalendarBlankIcon,
+  ChartLineUpIcon,
+  ClockCounterClockwiseIcon,
+  GearSixIcon,
+  HouseLineIcon,
+  MagnifyingGlassIcon,
+  MedalIcon,
+  NotebookIcon,
+} from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
 
 import type { User } from '../../api/auth'
+import { CorvusBrand } from '../../components/CorvusBrand'
+import { LanguageSwitcher } from '../../components/LanguageSwitcher'
+import './Dashboard.css'
 
 type DashboardProps = {
   currentUser: User
@@ -18,78 +32,39 @@ type IconName =
   | 'progress'
   | 'search'
   | 'settings'
-  | 'user'
+  | 'achievement'
 
 function Icon({ name }: { name: IconName }) {
-  const paths: Record<IconName, ReactNode> = {
-    calendar: (
-      <>
-        <rect x="3" y="5" width="18" height="16" rx="3" />
-        <path d="M8 3v4M16 3v4M3 10h18" />
-      </>
-    ),
-    dashboard: (
-      <>
-        <path d="M4 11 12 4l8 7v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1Z" />
-      </>
-    ),
-    dumbbell: <path d="M6 8v8M3.5 9.5v5M18 8v8M20.5 9.5v5M6 12h12" />,
-    exercise: (
-      <>
-        <rect x="4" y="6" width="16" height="13" rx="3" />
-        <path d="M9 6V4h6v2M8 11h8" />
-      </>
-    ),
-    history: (
-      <>
-        <path d="M4 12a8 8 0 1 0 2.35-5.65L4 8.7" />
-        <path d="M4 4v4.7h4.7M12 8v4l2.5 1.5" />
-      </>
-    ),
-    progress: <path d="M4 19V9M10 19V5M16 19v-7M22 19H2" />,
-    search: (
-      <>
-        <circle cx="10.5" cy="10.5" r="6.5" />
-        <path d="m16 16 4.5 4.5" />
-      </>
-    ),
-    settings: (
-      <>
-        <circle cx="12" cy="12" r="3" />
-        <path d="M19 12a7 7 0 0 0-.13-1.34l2-1.55-2-3.46-2.47 1a7 7 0 0 0-2.32-1.34L13.7 3h-4l-.38 2.31A7 7 0 0 0 7 6.65l-2.47-1-2 3.46 2 1.55A7 7 0 0 0 4.4 12c0 .46.04.91.13 1.34l-2 1.55 2 3.46 2.47-1a7 7 0 0 0 2.32 1.34L9.7 21h4l.38-2.31a7 7 0 0 0 2.32-1.34l2.47 1 2-3.46-2-1.55c.09-.43.13-.88.13-1.34Z" />
-      </>
-    ),
-    user: (
-      <>
-        <circle cx="12" cy="8" r="3" />
-        <path d="M5 20v-2a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v2" />
-      </>
-    ),
+  const icons = {
+    calendar: CalendarBlankIcon,
+    dashboard: HouseLineIcon,
+    dumbbell: BarbellIcon,
+    exercise: NotebookIcon,
+    history: ClockCounterClockwiseIcon,
+    progress: ChartLineUpIcon,
+    search: MagnifyingGlassIcon,
+    settings: GearSixIcon,
+    achievement: MedalIcon,
   }
+  const DashboardIcon = icons[name]
 
   return (
-    <svg
+    <DashboardIcon
       className="dashboard-icon"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      size={20}
+      weight={name === 'dashboard' ? 'bold' : 'regular'}
       aria-hidden="true"
-    >
-      {paths[name]}
-    </svg>
+    />
   )
 }
 
-const trainingLinks: Array<{ icon: IconName; label: string }> = [
-  { icon: 'dumbbell', label: 'Workouts' },
-  { icon: 'calendar', label: 'Templates' },
-  { icon: 'exercise', label: 'Exercises' },
-  { icon: 'history', label: 'Sessions' },
-  { icon: 'history', label: 'History' },
-  { icon: 'progress', label: 'Progress' },
+const trainingLinks: Array<{ icon: IconName; translationKey: string }> = [
+  { icon: 'dumbbell', translationKey: 'dashboard.nav.workouts' },
+  { icon: 'calendar', translationKey: 'dashboard.nav.templates' },
+  { icon: 'exercise', translationKey: 'dashboard.nav.exercises' },
+  { icon: 'history', translationKey: 'dashboard.nav.sessions' },
+  { icon: 'history', translationKey: 'dashboard.nav.history' },
+  { icon: 'progress', translationKey: 'dashboard.nav.progress' },
 ]
 
 export function Dashboard({
@@ -98,25 +73,26 @@ export function Dashboard({
   logoutError,
   onLogout,
 }: DashboardProps) {
+  const { t } = useTranslation()
+  const volumeScale = t('dashboard.volume.scale', { returnObjects: true }) as string[]
+  const weekDays = t('dashboard.volume.days', { returnObjects: true }) as string[]
+
   return (
     <div className="fitness-dashboard">
       <aside className="fitness-sidebar">
-        <div className="fitness-brand">
-          <span className="fitness-brand__bird" aria-hidden="true">C</span>
-          <span>CORVUS</span>
-        </div>
+        <div className="fitness-brand"><CorvusBrand compact /></div>
 
-        <nav className="fitness-nav" aria-label="Primary navigation">
+        <nav className="fitness-nav" aria-label={t('dashboard.navLabel')}>
           <a className="fitness-nav__link fitness-nav__link--active" href="#dashboard">
             <Icon name="dashboard" />
-            Dashboard
+            {t('dashboard.nav.dashboard')}
           </a>
 
-          <p className="fitness-nav__label">Training</p>
+          <p className="fitness-nav__label">{t('dashboard.nav.training')}</p>
           {trainingLinks.map((link) => (
-            <span className="fitness-nav__link fitness-nav__link--disabled" aria-disabled="true" key={link.label}>
+            <span className="fitness-nav__link fitness-nav__link--disabled" aria-disabled="true" key={link.translationKey}>
               <Icon name={link.icon} />
-              {link.label}
+              {t(link.translationKey)}
             </span>
           ))}
         </nav>
@@ -124,7 +100,7 @@ export function Dashboard({
         <div className="fitness-sidebar__footer">
           <span className="fitness-nav__link fitness-nav__link--disabled" aria-disabled="true">
             <Icon name="settings" />
-            Settings
+            {t('dashboard.nav.settings')}
           </span>
           <div className="fitness-profile">
             <span className="fitness-profile__avatar" aria-hidden="true">
@@ -135,7 +111,7 @@ export function Dashboard({
               <span>@{currentUser.username}</span>
             </div>
             <button type="button" disabled={isLoggingOut} onClick={onLogout}>
-              {isLoggingOut ? 'Leaving…' : 'Log out'}
+              {isLoggingOut ? t('dashboard.loggingOut') : t('dashboard.logout')}
             </button>
           </div>
         </div>
@@ -144,19 +120,19 @@ export function Dashboard({
       <main className="fitness-main" id="dashboard">
         <header className="fitness-topbar">
           <div>
-            <p>Dashboard</p>
-            <h1>Good to see you, {currentUser.first_name}</h1>
-            <span>Ready to make today count?</span>
+            <h1>{t('dashboard.greeting', { name: currentUser.first_name })}</h1>
+            <span>{t('dashboard.subtitle')}</span>
           </div>
           <div className="fitness-topbar__actions">
-            <button className="icon-action" type="button" disabled aria-label="Search coming soon">
+            <LanguageSwitcher />
+            <button className="icon-action" type="button" disabled aria-label={t('dashboard.searchSoon')}>
               <Icon name="search" />
             </button>
-            <button className="icon-action" type="button" disabled aria-label="Calendar coming soon">
+            <button className="icon-action" type="button" disabled aria-label={t('dashboard.calendarSoon')}>
               <Icon name="calendar" />
             </button>
-            <button className="fitness-primary" type="button" disabled title="Workout sessions are not implemented yet">
-              + Start workout
+            <button className="fitness-primary" type="button" disabled title={t('dashboard.workoutUnavailable')}>
+              {t('dashboard.startWorkout')}
             </button>
           </div>
         </header>
@@ -165,68 +141,73 @@ export function Dashboard({
 
         <div className="fitness-grid">
           <section className="dark-card weekly-card" aria-labelledby="week-title">
-            <h2 id="week-title"><Icon name="progress" /> This week</h2>
+            <h2 id="week-title"><Icon name="progress" /> {t('dashboard.week.title')}</h2>
             <div className="weekly-metrics">
-              <article><span>Workouts</span><strong>0</strong><small>No sessions yet</small></article>
-              <article><span>Volume</span><strong>0 kg</strong><small>Waiting for data</small></article>
-              <article><span>Duration</span><strong>0m</strong><small>No training logged</small></article>
-              <article><span>Sets</span><strong>0</strong><small>Nothing recorded</small></article>
+              <article><span>{t('dashboard.week.workouts')}</span><strong>0</strong><small>{t('dashboard.week.noSessions')}</small></article>
+              <article><span>{t('dashboard.week.volume')}</span><strong>{t('dashboard.week.zeroVolume')}</strong><small>{t('dashboard.week.waiting')}</small></article>
+              <article><span>{t('dashboard.week.duration')}</span><strong>{t('dashboard.week.zeroDuration')}</strong><small>{t('dashboard.week.noTraining')}</small></article>
+              <article><span>{t('dashboard.week.sets')}</span><strong>0</strong><small>{t('dashboard.week.nothingRecorded')}</small></article>
             </div>
           </section>
 
           <section className="dark-card up-next-card" aria-labelledby="up-next-title">
-            <h2 id="up-next-title"><Icon name="calendar" /> Up next</h2>
+            <h2 id="up-next-title"><Icon name="calendar" /> {t('dashboard.upNext.title')}</h2>
             <div className="dark-empty dark-empty--compact">
-              <strong>No workout scheduled</strong>
-              <p>Create a template to prepare your next session.</p>
-              <button type="button" disabled>Create template</button>
+              <strong>{t('dashboard.upNext.empty')}</strong>
+              <p>{t('dashboard.upNext.hint')}</p>
+              <button type="button" disabled>{t('dashboard.upNext.action')}</button>
             </div>
           </section>
 
           <section className="dark-card volume-card" aria-labelledby="volume-title">
             <div className="dark-card__heading">
-              <h2 id="volume-title">Training volume</h2>
-              <span>This week</span>
+              <h2 id="volume-title">{t('dashboard.volume.title')}</h2>
+              <span>{t('dashboard.volume.period')}</span>
             </div>
-            <div className="volume-chart" aria-label="No training volume data yet">
-              <div className="chart-y"><span>20k</span><span>15k</span><span>10k</span><span>5k</span><span>0</span></div>
+            <div className="volume-chart" aria-label={t('dashboard.volume.noDataLabel')}>
+              <div className="chart-calibration" aria-hidden="true">
+                <span>{t('dashboard.volume.measure')}</span>
+                <i />
+                <span>{t('dashboard.volume.baseline')}</span>
+              </div>
+              <div className="chart-y">{volumeScale.map((label) => <span key={label}>{label}</span>)}</div>
               <div className="chart-area">
                 <i /><i /><i /><i /><i />
                 <svg viewBox="0 0 700 190" preserveAspectRatio="none" aria-hidden="true">
                   <path className="chart-placeholder" d="M0 174 L700 174" />
                 </svg>
-                <div className="chart-days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                <div className="chart-days">{weekDays.map((day) => <span key={day}>{day}</span>)}</div>
               </div>
             </div>
           </section>
 
           <section className="dark-card progress-card" aria-labelledby="progress-title">
             <div className="dark-card__heading">
-              <h2 id="progress-title"><Icon name="progress" /> Progress overview</h2>
-              <span>This month</span>
+              <h2 id="progress-title"><Icon name="progress" /> {t('dashboard.progress.title')}</h2>
+              <span>{t('dashboard.progress.period')}</span>
             </div>
             <div className="progress-list">
-              {['Volume', 'Strength', 'Workouts'].map((label) => (
-                <div key={label}><span>{label}</span><strong>—</strong><small>No data</small></div>
+              {['volume', 'strength', 'workouts'].map((key) => (
+                <div key={key}><span>{t(`dashboard.progress.${key}`)}</span><strong>-</strong><small>{t('dashboard.progress.noData')}</small></div>
               ))}
             </div>
           </section>
 
           <section className="dark-card recent-card" aria-labelledby="recent-title">
-            <h2 id="recent-title">Recent workouts</h2>
+            <h2 id="recent-title">{t('dashboard.recent.title')}</h2>
             <div className="dark-empty">
               <Icon name="dumbbell" />
-              <strong>No completed workouts</strong>
-              <p>Your latest sessions will appear here.</p>
+              <strong>{t('dashboard.recent.empty')}</strong>
+              <p>{t('dashboard.recent.hint')}</p>
             </div>
           </section>
 
           <section className="dark-card achievement-card" aria-labelledby="achievement-title">
-            <h2 id="achievement-title">Achievements</h2>
+            <h2 id="achievement-title">{t('dashboard.achievements.title')}</h2>
             <div className="dark-empty">
-              <span className="achievement-badge" aria-hidden="true">★</span>
-              <strong>Your first milestone awaits</strong>
-              <p>Complete workouts to unlock achievements.</p>
+              <span className="achievement-badge" aria-hidden="true"><Icon name="achievement" /></span>
+              <strong>{t('dashboard.achievements.empty')}</strong>
+              <p>{t('dashboard.achievements.hint')}</p>
             </div>
           </section>
         </div>

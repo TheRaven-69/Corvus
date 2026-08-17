@@ -56,6 +56,17 @@ Automatic retry of arbitrary protected requests after an access token expires
 is not implemented yet. It should be added with the first protected workout API
 integration rather than introduced as a premature abstraction.
 
+## Localization
+
+Corvus uses `i18next` with `react-i18next`. English is the default language and
+Ukrainian can be selected with the `EN / UK` control. The selection is stored
+under `corvus.language` in `localStorage`, and the page `<html lang>` attribute
+is updated with it.
+
+User-facing text belongs in `src/i18n.ts`, not directly in components. Add both
+English and Ukrainian values for every new translation key so future screens
+remain complete in both languages.
+
 ## Local development
 
 The backend should run at `http://localhost:8000`. Then run these commands in
