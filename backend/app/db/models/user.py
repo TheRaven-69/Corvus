@@ -9,6 +9,7 @@ from app.db.base import Base
 
 if TYPE_CHECKING:
     from app.db.models.auth_session import AuthSession
+    from app.db.models.exercise import Exercise
 
 
 class User(Base):
@@ -46,6 +47,11 @@ class User(Base):
     )
     auth_sessions: Mapped[list["AuthSession"]] = relationship(
         back_populates="user",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+    exercises: Mapped[list["Exercise"]] = relationship(
+        back_populates="owner",
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
