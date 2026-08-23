@@ -9,19 +9,26 @@ import {
   MedalIcon,
   NotebookIcon,
 } from '@phosphor-icons/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { User } from '../../api/auth'
 import { CorvusBrand } from '../../components/CorvusBrand'
 import { LanguageSwitcher } from '../../components/LanguageSwitcher'
+import { ExercisesPage } from '../exercises/ExercisesPage'
 import './Dashboard.css'
 
 type DashboardProps = {
+  accessToken: string
   currentUser: User
   isLoggingOut: boolean
   logoutError: string | null
+  onAccessTokenChange: (accessToken: string) => void
   onLogout: () => void
+  onSessionExpired: () => void
 }
+
+type DashboardView = 'dashboard' | 'exercises'
 
 type IconName =
   | 'calendar'
@@ -58,22 +65,35 @@ function Icon({ name }: { name: IconName }) {
   )
 }
 
-const trainingLinks: Array<{ icon: IconName; translationKey: string }> = [
+const trainingLinks: Array<{
+  icon: IconName
+  translationKey: string
+  view?: DashboardView
+}> = [
   { icon: 'dumbbell', translationKey: 'dashboard.nav.workouts' },
   { icon: 'calendar', translationKey: 'dashboard.nav.templates' },
-  { icon: 'exercise', translationKey: 'dashboard.nav.exercises' },
+  {
+    icon: 'exercise',
+    translationKey: 'dashboard.nav.exercises',
+    view: 'exercises',
+  },
   { icon: 'history', translationKey: 'dashboard.nav.sessions' },
   { icon: 'history', translationKey: 'dashboard.nav.history' },
   { icon: 'progress', translationKey: 'dashboard.nav.progress' },
 ]
 
 export function Dashboard({
+  accessToken,
   currentUser,
   isLoggingOut,
   logoutError,
+  onAccessTokenChange,
   onLogout,
+  onSessionExpired,
 }: DashboardProps) {
   const { t } = useTranslation()
+  const [activeView, setActiveView] = useState<DashboardView>('dashboard')
+  const [isExerciseFormOpen, setIsExerciseFormOpen] = useState(false)
   const volumeScale = t('dashboard.volume.scale', { returnObjects: true }) as string[]
   const weekDays = t('dashboard.volume.days', { returnObjects: true }) as string[]
 
@@ -83,18 +103,48 @@ export function Dashboard({
         <div className="fitness-brand"><CorvusBrand compact /></div>
 
         <nav className="fitness-nav" aria-label={t('dashboard.navLabel')}>
-          <a className="fitness-nav__link fitness-nav__link--active" href="#dashboard">
+          <button
+            className={
+              activeView === 'dashboard'
+                ? 'fitness-nav__link fitness-nav__link--active'
+                : 'fitness-nav__link'
+            }
+            type="button"
+            aria-current={activeView === 'dashboard' ? 'page' : undefined}
+            onClick={() => setActiveView('dashboard')}
+          >
             <Icon name="dashboard" />
             {t('dashboard.nav.dashboard')}
-          </a>
+          </button>
 
           <p className="fitness-nav__label">{t('dashboard.nav.training')}</p>
-          {trainingLinks.map((link) => (
-            <span className="fitness-nav__link fitness-nav__link--disabled" aria-disabled="true" key={link.translationKey}>
-              <Icon name={link.icon} />
-              {t(link.translationKey)}
-            </span>
-          ))}
+          {trainingLinks.map((link) =>
+            link.view ? (
+              <button
+                className={
+                  activeView === link.view
+                    ? 'fitness-nav__link fitness-nav__link--active'
+                    : 'fitness-nav__link'
+                }
+                type="button"
+                aria-current={activeView === link.view ? 'page' : undefined}
+                key={link.translationKey}
+                onClick={() => setActiveView(link.view ?? 'dashboard')}
+              >
+                <Icon name={link.icon} />
+                {t(link.translationKey)}
+              </button>
+            ) : (
+              <span
+                className="fitness-nav__link fitness-nav__link--disabled"
+                aria-disabled="true"
+                key={link.translationKey}
+              >
+                <Icon name={link.icon} />
+                {t(link.translationKey)}
+              </span>
+            ),
+          )}
         </nav>
 
         <div className="fitness-sidebar__footer">
@@ -103,12 +153,14 @@ export function Dashboard({
             {t('dashboard.nav.settings')}
           </span>
           <div className="fitness-profile">
-            <span className="fitness-profile__avatar" aria-hidden="true">
-              {currentUser.first_name.charAt(0).toUpperCase()}
-            </span>
-            <div>
-              <strong>{currentUser.first_name} {currentUser.last_name}</strong>
-              <span>@{currentUser.username}</span>
+            <div className="fitness-profile__identity">
+              <span className="fitness-profile__avatar" aria-hidden="true">
+                {currentUser.first_name.charAt(0).toUpperCase()}
+              </span>
+              <div>
+                <strong>{currentUser.first_name} {currentUser.last_name}</strong>
+                <span>@{currentUser.username}</span>
+              </div>
             </div>
             <button type="button" disabled={isLoggingOut} onClick={onLogout}>
               {isLoggingOut ? t('dashboard.loggingOut') : t('dashboard.logout')}
@@ -120,26 +172,49 @@ export function Dashboard({
       <main className="fitness-main" id="dashboard">
         <header className="fitness-topbar">
           <div>
-            <h1>{t('dashboard.greeting', { name: currentUser.first_name })}</h1>
-            <span>{t('dashboard.subtitle')}</span>
+            <h1>
+              {activeView === 'dashboard'
+                ? t('dashboard.greeting', { name: currentUser.first_name })
+                : t('exercises.title')}
+            </h1>
+            <span>
+              {activeView === 'dashboard'
+                ? t('dashboard.subtitle')
+                : t('exercises.subtitle')}
+            </span>
           </div>
           <div className="fitness-topbar__actions">
             <LanguageSwitcher />
-            <button className="icon-action" type="button" disabled aria-label={t('dashboard.searchSoon')}>
-              <Icon name="search" />
-            </button>
-            <button className="icon-action" type="button" disabled aria-label={t('dashboard.calendarSoon')}>
-              <Icon name="calendar" />
-            </button>
-            <button className="fitness-primary" type="button" disabled title={t('dashboard.workoutUnavailable')}>
-              {t('dashboard.startWorkout')}
-            </button>
+            {activeView === 'dashboard' ? (
+              <>
+                <button className="icon-action" type="button" disabled aria-label={t('dashboard.searchSoon')}>
+                  <Icon name="search" />
+                </button>
+                <button className="icon-action" type="button" disabled aria-label={t('dashboard.calendarSoon')}>
+                  <Icon name="calendar" />
+                </button>
+                <button className="fitness-primary" type="button" disabled title={t('dashboard.workoutUnavailable')}>
+                  {t('dashboard.startWorkout')}
+                </button>
+              </>
+            ) : !isExerciseFormOpen ? (
+              <button
+                className="fitness-primary fitness-primary--enabled"
+                type="button"
+                aria-controls="exercise-create-panel"
+                aria-expanded="false"
+                onClick={() => setIsExerciseFormOpen(true)}
+              >
+                {t('exercises.add')}
+              </button>
+            ) : null}
           </div>
         </header>
 
         {logoutError ? <p className="form-error fitness-error" role="alert">{logoutError}</p> : null}
 
-        <div className="fitness-grid">
+        {activeView === 'dashboard' ? (
+          <div className="fitness-grid">
           <section className="dark-card weekly-card" aria-labelledby="week-title">
             <h2 id="week-title"><Icon name="progress" /> {t('dashboard.week.title')}</h2>
             <div className="weekly-metrics">
@@ -210,7 +285,16 @@ export function Dashboard({
               <p>{t('dashboard.achievements.hint')}</p>
             </div>
           </section>
-        </div>
+          </div>
+        ) : (
+          <ExercisesPage
+            accessToken={accessToken}
+            isFormOpen={isExerciseFormOpen}
+            onAccessTokenChange={onAccessTokenChange}
+            onFormOpenChange={setIsExerciseFormOpen}
+            onSessionExpired={onSessionExpired}
+          />
+        )}
       </main>
     </div>
   )

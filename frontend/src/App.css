@@ -356,6 +356,12 @@
   background: var(--corvus-surface-raised);
 }
 
+@media (pointer: coarse) {
+  .language-switcher__option {
+    min-height: 2.75rem;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .auth-tab:hover:not(.auth-tab--active) {
     color: var(--corvus-text);

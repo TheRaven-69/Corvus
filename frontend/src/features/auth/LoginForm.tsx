@@ -2,13 +2,17 @@ import { useState, type FormEvent } from 'react'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 
-import { getCurrentUser, login, type User } from '../../api/auth'
+import {
+  getCurrentUser,
+  login,
+  type AuthenticatedSession,
+} from '../../api/auth'
 import { ApiError } from '../../api/http'
 
 type LoginFormProps = {
   initialLogin?: string
   successMessage?: string | null
-  onAuthenticated: (user: User) => void
+  onAuthenticated: (session: AuthenticatedSession) => void
 }
 
 function readableLoginError(error: unknown, t: TFunction): string {
@@ -42,7 +46,7 @@ export function LoginForm({
     try {
       const token = await login({ login: loginValue, password })
       const user = await getCurrentUser(token.access_token)
-      onAuthenticated(user)
+      onAuthenticated({ accessToken: token.access_token, user })
     } catch (error) {
       setErrorMessage(readableLoginError(error, t))
     } finally {
