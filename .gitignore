@@ -10,6 +10,9 @@
 
 # Agent instruction file is local for this workspace
 AGENTS.md
+DESIGN.md
+PRODUCT.md
+
 
 # Python environments and caches
 /backend/.venv/
