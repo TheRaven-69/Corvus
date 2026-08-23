@@ -1,4 +1,4 @@
-import { apiRequest } from './http'
+import { ApiError, apiRequest } from './http'
 
 export type LoginCredentials = {
   login: string
@@ -27,7 +27,13 @@ export type User = {
   created_at: string
 }
 
-let pendingSessionRestore: Promise<User> | null = null
+export type AuthenticatedSession = {
+  accessToken: string
+  user: User
+}
+
+let pendingSessionRestore: Promise<AuthenticatedSession> | null = null
+let pendingTokenRefresh: Promise<TokenResponse> | null = null
 
 export function login(credentials: LoginCredentials): Promise<TokenResponse> {
   return apiRequest<TokenResponse>('/auth/login', {
@@ -44,9 +50,15 @@ export function register(data: RegistrationData): Promise<User> {
 }
 
 export function refreshAccessToken(): Promise<TokenResponse> {
-  return apiRequest<TokenResponse>('/auth/refresh', {
-    method: 'POST',
-  })
+  if (!pendingTokenRefresh) {
+    pendingTokenRefresh = apiRequest<TokenResponse>('/auth/refresh', {
+      method: 'POST',
+    }).finally(() => {
+      pendingTokenRefresh = null
+    })
+  }
+
+  return pendingTokenRefresh
 }
 
 export function getCurrentUser(accessToken: string): Promise<User> {
@@ -57,12 +69,17 @@ export function getCurrentUser(accessToken: string): Promise<User> {
   })
 }
 
-export function restoreCurrentUser(): Promise<User> {
+export function restoreCurrentSession(): Promise<AuthenticatedSession> {
   if (!pendingSessionRestore) {
     pendingSessionRestore = (async () => {
       try {
         const token = await refreshAccessToken()
-        return await getCurrentUser(token.access_token)
+        const user = await getCurrentUser(token.access_token)
+
+        return {
+          accessToken: token.access_token,
+          user,
+        }
       } finally {
         pendingSessionRestore = null
       }
@@ -70,6 +87,39 @@ export function restoreCurrentUser(): Promise<User> {
   }
 
   return pendingSessionRestore
+}
+
+export async function apiRequestWithAuth<T>(
+  path: string,
+  accessToken: string,
+  options: RequestInit = {},
+): Promise<{ accessToken: string; data: T }> {
+  const request = (token: string) =>
+    apiRequest<T>(path, {
+      ...options,
+      headers: {
+        ...options.headers,
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+  try {
+    return {
+      accessToken,
+      data: await request(accessToken),
+    }
+  } catch (error) {
+    if (!(error instanceof ApiError) || error.status !== 401) {
+      throw error
+    }
+
+    const refreshedToken = await refreshAccessToken()
+
+    return {
+      accessToken: refreshedToken.access_token,
+      data: await request(refreshedToken.access_token),
+    }
+  }
 }
 
 export function logout(): Promise<void> {

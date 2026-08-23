@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import './App.css'
 
 import {
   logout,
-  restoreCurrentUser,
-  type User,
+  restoreCurrentSession,
+  type AuthenticatedSession,
 } from './api/auth'
 import { AuthPanel } from './features/auth/AuthPanel'
 import { Dashboard } from './features/dashboard/Dashboard'
@@ -14,7 +14,7 @@ import { LanguageSwitcher } from './components/LanguageSwitcher'
 
 function App() {
   const { t } = useTranslation()
-  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [session, setSession] = useState<AuthenticatedSession | null>(null)
   const [isCheckingSession, setIsCheckingSession] = useState(true)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [logoutError, setLogoutError] = useState<string | null>(null)
@@ -24,10 +24,10 @@ function App() {
 
     async function restoreSession() {
       try {
-        const user = await restoreCurrentUser()
+        const restoredSession = await restoreCurrentSession()
 
         if (!isCancelled) {
-          setCurrentUser(user)
+          setSession(restoredSession)
         }
       } catch {
         // A missing or expired refresh cookie means the user is signed out.
@@ -51,7 +51,7 @@ function App() {
 
     try {
       await logout()
-      setCurrentUser(null)
+      setSession(null)
     } catch {
       setLogoutError(t('auth.errors.logout'))
     } finally {
@@ -59,13 +59,28 @@ function App() {
     }
   }
 
-  if (!isCheckingSession && currentUser) {
+  const handleAccessTokenChange = useCallback((accessToken: string) => {
+    setSession((currentSession) =>
+      currentSession
+        ? { ...currentSession, accessToken }
+        : currentSession,
+    )
+  }, [])
+
+  const handleSessionExpired = useCallback(() => {
+    setSession(null)
+  }, [])
+
+  if (!isCheckingSession && session) {
     return (
       <Dashboard
-        currentUser={currentUser}
+        accessToken={session.accessToken}
+        currentUser={session.user}
         isLoggingOut={isLoggingOut}
         logoutError={logoutError}
+        onAccessTokenChange={handleAccessTokenChange}
         onLogout={handleLogout}
+        onSessionExpired={handleSessionExpired}
       />
     )
   }
@@ -91,7 +106,7 @@ function App() {
             <p>{t('landing.checkingSession')}</p>
           </div>
         ) : (
-          <AuthPanel onAuthenticated={setCurrentUser} />
+          <AuthPanel onAuthenticated={setSession} />
         )}
       </section>
     </main>

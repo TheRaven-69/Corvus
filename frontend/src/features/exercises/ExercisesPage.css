@@ -1,0 +1,398 @@
+.exercise-workspace {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.8rem;
+}
+
+.exercise-workspace--form-open {
+  grid-template-columns: minmax(0, 1.65fr) minmax(18rem, 0.75fr);
+}
+
+.exercise-catalog,
+.exercise-create {
+  min-width: 0;
+  border: 1px solid var(--corvus-line);
+  border-radius: var(--corvus-radius-md);
+  background: var(--corvus-surface);
+}
+
+.exercise-toolbar {
+  min-height: 5.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 1.15rem;
+  border-bottom: 1px solid var(--corvus-line);
+}
+
+.exercise-toolbar h2,
+.exercise-create h2 {
+  margin: 0;
+  color: var(--corvus-text);
+  font-size: 1.15rem;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+}
+
+.exercise-toolbar p,
+.exercise-create p {
+  margin: 0.3rem 0 0;
+  color: var(--corvus-muted);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.exercise-search {
+  width: min(100%, 20rem);
+  min-width: 12rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--corvus-faint);
+}
+
+.exercise-search > svg {
+  position: absolute;
+  left: 0.8rem;
+  pointer-events: none;
+}
+
+.exercise-search input {
+  width: 100%;
+  min-height: 2.7rem;
+  padding: 0.65rem 0.8rem 0.65rem 2.45rem;
+  border: 1px solid var(--corvus-line-strong);
+  border-radius: var(--corvus-radius-sm);
+  color: var(--corvus-text);
+  background: var(--corvus-surface-input);
+  font-size: 0.86rem;
+}
+
+.exercise-search input::placeholder {
+  color: var(--corvus-faint);
+}
+
+.exercise-search:focus-within {
+  color: var(--corvus-accent);
+}
+
+.exercise-search input:focus {
+  border-color: var(--corvus-accent);
+  outline: none;
+  box-shadow: 0 0 0 0.22rem var(--corvus-focus);
+}
+
+.exercise-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.exercise-list > li + li {
+  border-top: 1px solid var(--corvus-line);
+}
+
+.exercise-row {
+  min-width: 0;
+  min-height: 5rem;
+  display: grid;
+  grid-template-columns: minmax(12rem, 1fr) minmax(10rem, auto);
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.85rem 1.15rem;
+  transition: background-color 140ms var(--corvus-ease-out);
+}
+
+.exercise-row__identity {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.exercise-row__mark {
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid #315b3d;
+  border-radius: var(--corvus-radius-sm);
+  color: var(--corvus-accent);
+  background: var(--corvus-accent-dark);
+}
+
+.exercise-row__identity > div {
+  min-width: 0;
+}
+
+.exercise-row h3 {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--corvus-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.exercise-row__identity > div > span {
+  display: block;
+  margin-top: 0.28rem;
+  color: var(--corvus-faint);
+  font-size: 0.67rem;
+}
+
+.exercise-row__groups {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.exercise-row__groups span {
+  padding: 0.32rem 0.5rem;
+  border: 1px solid var(--corvus-line-strong);
+  border-radius: var(--corvus-radius-sm);
+  color: #c2cbc6;
+  background: var(--corvus-surface-input);
+  font-size: 0.66rem;
+  line-height: 1;
+}
+
+.exercise-state {
+  min-height: 22rem;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  padding: 2rem;
+  color: var(--corvus-accent);
+  text-align: center;
+}
+
+.exercise-state strong {
+  margin-top: 0.8rem;
+  font-size: 1rem;
+}
+
+.exercise-state p {
+  max-width: 30rem;
+  margin: 0.45rem 0 0;
+  color: var(--corvus-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.exercise-state button,
+.exercise-create__close {
+  min-height: 2.4rem;
+  border: 1px solid var(--corvus-line-strong);
+  border-radius: var(--corvus-radius-sm);
+  color: var(--corvus-text);
+  background: var(--corvus-surface-raised);
+  font-size: 0.72rem;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.exercise-state button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  padding-inline: 0.85rem;
+}
+
+.exercise-state--error {
+  color: var(--corvus-danger);
+}
+
+.exercise-create {
+  align-self: start;
+  position: sticky;
+  top: 1rem;
+  padding: 1.15rem;
+}
+
+.exercise-create__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--corvus-line);
+}
+
+.exercise-create__close {
+  min-width: max-content;
+  padding-inline: 0.7rem;
+  color: var(--corvus-muted);
+  background: var(--corvus-surface-input);
+}
+
+.exercise-create form {
+  display: grid;
+  gap: 1.15rem;
+  margin-top: 1.15rem;
+}
+
+.muscle-group-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.muscle-group-fieldset legend {
+  padding: 0;
+  color: #dce2de;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.muscle-group-fieldset > p {
+  margin: 0.4rem 0 0.7rem;
+  color: var(--corvus-faint);
+  font-size: 0.74rem;
+}
+
+.muscle-group-fieldset > .muscle-group-fieldset__error {
+  margin-bottom: 0;
+  color: var(--corvus-danger);
+}
+
+.muscle-group-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.muscle-group-options label {
+  position: relative;
+  cursor: pointer;
+}
+
+.muscle-group-options input {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  opacity: 0;
+}
+
+.muscle-group-options span {
+  min-height: 2.15rem;
+  display: inline-flex;
+  align-items: center;
+  padding-inline: 0.65rem;
+  border: 1px solid var(--corvus-line-strong);
+  border-radius: var(--corvus-radius-sm);
+  color: var(--corvus-muted);
+  background: var(--corvus-surface-input);
+  font-size: 0.72rem;
+  font-weight: 680;
+  transition:
+    border-color 140ms var(--corvus-ease-out),
+    color 140ms var(--corvus-ease-out),
+    background-color 140ms var(--corvus-ease-out);
+}
+
+.muscle-group-options input:checked + span {
+  border-color: #376846;
+  color: var(--corvus-accent-strong);
+  background: var(--corvus-accent-dark);
+}
+
+.muscle-group-options input:focus-visible + span {
+  outline: 0.18rem solid var(--corvus-focus);
+  outline-offset: 0.15rem;
+}
+
+.exercise-create .form-success {
+  margin-top: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .exercise-row:hover {
+    background: var(--corvus-surface-raised);
+  }
+
+  .exercise-state button:hover,
+  .exercise-create__close:hover {
+    border-color: #526159;
+  }
+
+  .muscle-group-options label:hover span {
+    border-color: #526159;
+    color: var(--corvus-text);
+  }
+}
+
+@media (max-width: 68rem) {
+  .exercise-workspace--form-open {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .exercise-create {
+    grid-row: 1;
+    position: static;
+  }
+}
+
+@media (max-width: 48rem) {
+  .exercise-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .exercise-search {
+    width: 100%;
+  }
+
+  .exercise-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.7rem;
+  }
+
+  .exercise-row__groups {
+    justify-content: flex-start;
+    padding-inline-start: 3.25rem;
+  }
+
+  .exercise-state {
+    min-height: 17rem;
+  }
+}
+
+@media (max-width: 28rem) {
+  .exercise-row__groups {
+    padding-inline-start: 0;
+  }
+
+  .exercise-create__heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (pointer: coarse) {
+  .exercise-search input,
+  .exercise-state button,
+  .exercise-create__close,
+  .muscle-group-options span {
+    min-height: 2.75rem;
+  }
+
+  .muscle-group-options span {
+    padding-inline: 0.8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exercise-row,
+  .muscle-group-options span {
+    transition: none;
+  }
+}

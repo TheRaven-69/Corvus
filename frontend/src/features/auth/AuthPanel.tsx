@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import type { User } from '../../api/auth'
+import type { AuthenticatedSession } from '../../api/auth'
 import { LoginForm } from './LoginForm'
 import { RegisterForm } from './RegisterForm'
 
 type AuthMode = 'login' | 'register'
 
 type AuthPanelProps = {
-  onAuthenticated: (user: User) => void
+  onAuthenticated: (session: AuthenticatedSession) => void
 }
 
 export function AuthPanel({ onAuthenticated }: AuthPanelProps) {

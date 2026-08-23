@@ -52,9 +52,18 @@
   padding-inline: 0.75rem;
   border-radius: var(--corvus-radius-sm);
   color: #b7c0bb;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
   font-size: 0.78rem;
   font-weight: 650;
+  text-align: left;
   text-decoration: none;
+}
+
+button.fitness-nav__link {
+  width: 100%;
+  cursor: pointer;
 }
 
 .fitness-nav__link--active {
@@ -101,6 +110,10 @@
   gap: 0.65rem;
   padding: 0.85rem 0.7rem 0;
   border-top: 1px solid var(--corvus-line);
+}
+
+.fitness-profile__identity {
+  display: contents;
 }
 
 .fitness-profile__avatar {
@@ -225,6 +238,16 @@
   background: #1a2a20;
   font-size: 0.76rem;
   font-weight: 800;
+}
+
+.fitness-primary--enabled {
+  border-color: var(--corvus-accent-strong);
+  color: #071009;
+  background: var(--corvus-accent);
+  cursor: pointer;
+  transition:
+    background-color 140ms var(--corvus-ease-out),
+    transform 100ms var(--corvus-ease-out);
 }
 
 .icon-action:disabled,
@@ -534,6 +557,16 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+  button.fitness-nav__link:hover:not(.fitness-nav__link--active) {
+    color: var(--corvus-text);
+    background: var(--corvus-surface-raised);
+  }
+
+  .fitness-primary--enabled:hover {
+    background: var(--corvus-accent-strong);
+    transform: translateY(-1px);
+  }
+
   .fitness-profile button:hover:not(:disabled) {
     border-color: var(--corvus-line-strong);
     color: var(--corvus-text);
@@ -564,18 +597,27 @@
   .fitness-sidebar {
     min-height: auto;
     position: static;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'brand footer'
+      'nav nav';
+    align-items: center;
     padding: 0;
     border-right: 0;
     border-bottom: 1px solid var(--corvus-line-strong);
   }
 
   .fitness-brand {
+    grid-area: brand;
+    min-width: 0;
     min-height: 3.75rem;
     padding: 0 1rem;
     border-bottom: 0;
   }
 
   .fitness-nav {
+    grid-area: nav;
     display: flex;
     gap: 0.4rem;
     margin-top: 0;
@@ -585,9 +627,32 @@
   }
 
   .fitness-nav__label,
-  .fitness-nav__link--disabled,
-  .fitness-sidebar__footer {
+  .fitness-nav__link--disabled {
     display: none;
+  }
+
+  .fitness-sidebar__footer {
+    grid-area: footer;
+    position: static;
+    display: block;
+    margin-top: 0;
+    padding: 0 0.75rem 0 0;
+  }
+
+  .fitness-profile {
+    display: block;
+    padding: 0;
+    border-top: 0;
+  }
+
+  .fitness-profile__identity {
+    display: none;
+  }
+
+  .fitness-profile button {
+    min-height: 2.75rem;
+    margin-top: 0;
+    padding-inline: 0.85rem;
   }
 
   .fitness-nav__link {
@@ -656,6 +721,14 @@
   }
 }
 
+@media (pointer: coarse) {
+  .fitness-nav__link,
+  .fitness-primary {
+    min-height: 2.75rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .fitness-profile button { transform: none !important; }
+  .fitness-profile button,
+  .fitness-primary--enabled { transform: none !important; }
 }
