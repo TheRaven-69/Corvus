@@ -5,7 +5,8 @@ structured alternative to notes, spreadsheets, and generic fitness apps.
 
 The project is currently an early MVP. The implemented vertical slice covers
 registration, sign-in, session restoration, sign-out, localization, and a
-responsive dashboard shell with honest empty states.
+responsive dashboard shell with honest empty states. The exercise catalog is
+integrated into the frontend; the backend also provides workout-template CRUD.
 
 ## Current features
 
@@ -16,9 +17,12 @@ responsive dashboard shell with honest empty states.
 - responsive authentication and dashboard screens;
 - explicit empty and unavailable states instead of fabricated workout data;
 - backend tests and frontend behavior tests.
+- system and personal exercises with localized names and muscle groups;
+- backend workout templates with ordered exercises, planned sets, repetitions,
+  and weights, including owner-only editing and deletion.
 
-The next product areas are exercises, workout templates, workout sessions,
-history, and exercise progress.
+Next are the workout-template frontend, workout sessions, history, and exercise
+progress. Template UI and session recording are not implemented yet.
 
 ## Technology
 
@@ -42,13 +46,15 @@ history, and exercise progress.
 Corvus/
 ├── backend/       FastAPI application, migrations, and tests
 ├── frontend/      React application and frontend tests
-├── PRODUCT.md     durable product direction
-└── DESIGN.md      shared visual design system
+└── README.md      setup and implementation status
 ```
 
 More detailed setup notes are available in
 [backend/README.md](backend/README.md) and
 [frontend/README.md](frontend/README.md).
+The [backend API guide](backend/API.md) describes authentication, payloads,
+PATCH behavior, and errors. Local `PRODUCT.md` and `DESIGN.md` files, when present,
+contain planning/design notes and are not required for setup.
 
 ## Quick start
 
@@ -56,14 +62,16 @@ More detailed setup notes are available in
 
 Docker Desktop or another Docker Compose environment is the simplest option.
 
-```powershell
-Copy-Item backend/.env.example backend/.env
+Commands below use Git Bash. For a new environment (preserve an existing `.env`):
+
+```bash
+cp backend/.env.example backend/.env
 ```
 
 Replace `POSTGRES_PASSWORD` and `CORVUS_JWT_SECRET_KEY` in `backend/.env`, then:
 
-```powershell
-Set-Location backend
+```bash
+cd backend
 docker compose up --build
 ```
 
@@ -72,10 +80,10 @@ documentation is available at `http://localhost:8000/docs`.
 
 ### 2. Start the frontend
 
-In a second terminal:
+In a second terminal, from the repository root:
 
-```powershell
-Set-Location frontend
+```bash
+cd frontend
 npm install
 npm run dev
 ```
@@ -84,19 +92,19 @@ Open the URL printed by Vite, normally `http://localhost:5173`.
 
 ## Checks
 
-Backend:
+Backend (from the repository root, with its Python environment activated):
 
-```powershell
-Set-Location backend
+```bash
+cd backend
 python scripts/run_unit_tests.py
 ruff check .
 ruff format --check .
 ```
 
-Frontend:
+Frontend (from the repository root):
 
-```powershell
-Set-Location frontend
+```bash
+cd frontend
 npm test
 npm run lint
 npm run build
