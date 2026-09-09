@@ -18,6 +18,7 @@ from app.db.base import Base
 
 if TYPE_CHECKING:
     from app.db.models.user import User
+    from app.db.models.workout_template import WorkoutTemplateExercise
 
 
 class MuscleGroup(Base):
@@ -85,6 +86,9 @@ class Exercise(Base):
     )
     owner: Mapped["User | None"] = relationship(
         back_populates="exercises",
+    )
+    workout_template_exercises: Mapped[list["WorkoutTemplateExercise"]] = relationship(
+        back_populates="exercise",
     )
 
 

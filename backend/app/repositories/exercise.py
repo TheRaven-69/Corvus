@@ -71,3 +71,28 @@ async def list_visible_exercises(
     result = await session.execute(statement)
 
     return list(result.scalars())
+
+
+async def get_visible_exercises_by_ids(
+    session: AsyncSession,
+    *,
+    user_id: UUID,
+    exercise_ids: set[UUID],
+) -> list[Exercise]:
+    if not exercise_ids:
+        return []
+
+    statement = (
+        select(Exercise)
+        .where(
+            Exercise.id.in_(exercise_ids),
+            or_(
+                Exercise.owner_user_id.is_(None),
+                Exercise.owner_user_id == user_id,
+            ),
+        )
+        .order_by(Exercise.id)
+    )
+    result = await session.execute(statement)
+
+    return list(result.scalars())
