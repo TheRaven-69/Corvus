@@ -1,7 +1,9 @@
 # Corvus frontend
 
 A React client for Corvus. The current vertical slice covers registration,
-sign-in, session restoration, sign-out, and an authenticated dashboard shell.
+sign-in, session restoration, sign-out, an authenticated dashboard shell, and
+exercise browsing/search and personal exercise creation. Workout-template CRUD
+exists on the backend; its frontend screens are not implemented yet.
 
 ## Project structure
 
@@ -13,11 +15,14 @@ frontend/
 │   ├── App.tsx                session state and root-level UI selection
 │   ├── api/
 │   │   ├── http.ts            shared fetch wrapper
-│   │   └── auth.ts            auth request types and API functions
+│   │   ├── auth.ts            auth and protected-request retry
+│   │   └── exercises.ts       exercise and muscle-group API contracts
 │   ├── features/auth/
 │   │   ├── AuthPanel.tsx      sign-in and registration mode selection
 │   │   ├── LoginForm.tsx      sign-in form and request states
 │   │   └── RegisterForm.tsx   registration form and validation
+│   ├── features/exercises/
+│   │   └── ExercisesPage.tsx  catalog search and personal exercise creation
 │   ├── features/dashboard/
 │   │   └── Dashboard.tsx      authenticated dashboard shell
 │   ├── App.test.tsx           behavior-focused authentication tests
@@ -52,9 +57,13 @@ The authenticated dashboard follows the intended Corvus information
 architecture. Workout actions that are not implemented yet are explicitly
 disabled and marked as coming soon.
 
-Automatic retry of arbitrary protected requests after an access token expires
-is not implemented yet. It should be added with the first protected workout API
-integration rather than introduced as a premature abstraction.
+Exercise API functions use `apiRequestWithAuth`: on a 401 it refreshes the access
+token and retries once, returning the current token alongside the response data.
+This applies to requests using that helper; the base `apiRequest` does not retry.
+
+Exercise search runs in the browser over the fetched catalog. See the
+[backend API guide](../backend/API.md) for the current server contract and the
+workout-template API available for the next frontend slice.
 
 ## Localization
 

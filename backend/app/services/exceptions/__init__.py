@@ -11,6 +11,11 @@ from app.services.exceptions.exercise import (
     ExerciseServiceError,
     UnknownMuscleGroupsError,
 )
+from app.services.exceptions.workout_template import (
+    UnavailableExercisesError,
+    WorkoutTemplateNotFoundError,
+    WorkoutTemplateServiceError,
+)
 
 __all__ = [
     "AuthServiceError",
@@ -19,7 +24,10 @@ __all__ = [
     "InvalidAccessTokenError",
     "InvalidCredentialsError",
     "InvalidRefreshTokenError",
+    "UnavailableExercisesError",
     "UnknownMuscleGroupsError",
     "UserAlreadyExistsError",
     "UsernameAlreadyExistsError",
+    "WorkoutTemplateNotFoundError",
+    "WorkoutTemplateServiceError",
 ]
