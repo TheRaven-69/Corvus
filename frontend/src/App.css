@@ -3,9 +3,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(24rem, 0.9fr);
   overflow: hidden;
-  background:
-    linear-gradient(118deg, rgb(99 217 130 / 7%), transparent 38rem),
-    var(--corvus-canvas);
+  background: var(--corvus-canvas);
 }
 
 .intro {
@@ -17,21 +15,6 @@
   overflow: hidden;
   padding: clamp(2rem, 5vw, 4.75rem);
   border-right: 1px solid var(--corvus-line);
-}
-
-.intro::before {
-  content: '';
-  width: min(30vw, 28rem);
-  aspect-ratio: 1;
-  position: absolute;
-  right: -10%;
-  bottom: -25%;
-  border: 1px solid rgb(99 217 130 / 10%);
-  border-radius: 50%;
-  box-shadow:
-    0 0 0 4rem rgb(99 217 130 / 2%),
-    0 0 0 8rem rgb(99 217 130 / 1.5%);
-  pointer-events: none;
 }
 
 .intro__topline {
@@ -57,9 +40,9 @@
   grid-template-rows: repeat(2, 1fr);
   gap: 0.2rem;
   padding: 0.38rem;
-  border: 1px solid #4d6156;
+  border: 1px solid var(--corvus-line-strong);
   border-radius: var(--corvus-radius-sm);
-  background: #111713;
+  background: var(--corvus-rail);
 }
 
 .corvus-mark i {
@@ -142,7 +125,7 @@
   border: 1px solid var(--corvus-line-strong);
   border-radius: var(--corvus-radius-lg);
   background: var(--corvus-surface);
-  box-shadow: 0 1.75rem 5rem rgb(0 0 0 / 32%);
+  box-shadow: none;
 }
 
 .auth-card h2 {
@@ -178,21 +161,8 @@
 }
 
 .auth-tab--active {
-  color: #071009;
+  color: var(--corvus-on-accent);
   background: var(--corvus-accent);
-}
-
-.auth-view {
-  transition:
-    transform 220ms var(--corvus-ease-out),
-    filter 220ms var(--corvus-ease-out);
-}
-
-@starting-style {
-  .auth-view {
-    transform: translateY(0.35rem);
-    filter: blur(1px);
-  }
 }
 
 .auth-card__hint {
@@ -220,7 +190,7 @@
 }
 
 .form-field label {
-  color: #dce2de;
+  color: var(--corvus-text);
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -245,14 +215,16 @@
     background-color 160ms var(--corvus-ease-out);
 }
 
-.form-field input:hover {
-  border-color: #526159;
+@media (hover: hover) and (pointer: fine) {
+  .form-field input:hover {
+    border-color: var(--corvus-accent-ink);
+  }
 }
 
 .form-field input:focus {
-  border-color: var(--corvus-accent);
+  border-color: var(--corvus-accent-ink);
   outline: none;
-  background: #0f1411;
+  background: var(--corvus-surface-input);
   box-shadow: 0 0 0 0.22rem var(--corvus-focus);
 }
 
@@ -264,7 +236,7 @@
   min-height: 3rem;
   border: 1px solid var(--corvus-accent-strong);
   border-radius: var(--corvus-radius-sm);
-  color: #071009;
+  color: var(--corvus-on-accent);
   background: var(--corvus-accent);
   font-weight: 800;
   cursor: pointer;
@@ -296,7 +268,7 @@
 
 .form-success {
   margin-top: 1.1rem;
-  color: var(--corvus-accent-strong);
+  color: var(--corvus-success);
   border-color: #285d38;
   background: var(--corvus-success-surface);
 }
@@ -318,13 +290,15 @@
   width: 2rem;
   height: 2rem;
   border: 0.18rem solid var(--corvus-line);
-  border-top-color: var(--corvus-accent);
+  border-top-color: var(--corvus-accent-ink);
   border-radius: 50%;
   animation: spin 700ms linear infinite;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .language-switcher {
@@ -338,8 +312,8 @@
 }
 
 .language-switcher__option {
-  min-width: 2.4rem;
-  min-height: 2rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
   padding: 0 0.45rem;
   border: 0;
   border-radius: 0.35rem;
@@ -352,7 +326,7 @@
 }
 
 .language-switcher__option--active {
-  color: var(--corvus-accent);
+  color: var(--corvus-accent-ink);
   background: var(--corvus-surface-raised);
 }
 
@@ -370,7 +344,6 @@
 
   .submit-button:hover:not(:disabled) {
     background: var(--corvus-accent-strong);
-    transform: translateY(-1px);
   }
 }
 
@@ -430,12 +403,67 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .auth-view {
-    transform: none;
-    transition-duration: 120ms;
-  }
-
   .submit-button {
     transform: none !important;
   }
 }
+
+@media (max-width: 40rem) {
+  .form-field input {
+    font-size: 1rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+/* Shared feedback for actionable controls across all screens. */
+button:not(:disabled) {
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  button:not(:disabled):hover {
+    box-shadow: inset 0 0 0 2px var(--corvus-accent);
+  }
+  .sidebar-toggle:hover,
+  button.fitness-nav__link:hover,
+  .fitness-profile button:hover:not(:disabled) {
+    background: #433b2d;
+    color: #fff;
+  }
+  .language-switcher__option:hover,
+  .dark-empty button:hover:not(:disabled),
+  .exercise-state button:hover,
+  .exercise-create__close:hover {
+    background: #e9dcc0;
+    color: var(--corvus-text);
+    cursor: pointer;
+  }
+  .template-editor :is(input, textarea, select):hover:not(:disabled),
+  .exercise-search input:hover:not(:disabled),
+  .form-field input:hover:not(:disabled) {
+    border-color: var(--corvus-accent-ink);
+    box-shadow: inset 0 0 0 1px var(--corvus-accent-ink);
+  }
+  .muscle-group-options label:hover span {
+    box-shadow: inset 0 0 0 2px var(--corvus-accent);
+  }
+}
+button:not(:disabled):active {
+  box-shadow: inset 0 0 0 2px var(--corvus-accent-ink);
+}
+button:focus-visible {
+  outline: 3px solid var(--corvus-focus);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  button:not(:disabled) { transition: none; }
+}
+
+.intro { background: var(--corvus-rail); --corvus-text: #f5f0e8; --corvus-muted: #bcb1a0; }
+.intro .language-switcher { --corvus-text: #1a1a1a; --corvus-muted: #716557; }
+.intro__measure { height: 0.5rem; background: #393221; }
+.auth-card { border-color: var(--corvus-line); }
+.auth-card__hint { font-size: 0.95rem; }

@@ -75,11 +75,11 @@
 }
 
 .exercise-search:focus-within {
-  color: var(--corvus-accent);
+  color: var(--corvus-accent-ink);
 }
 
 .exercise-search input:focus {
-  border-color: var(--corvus-accent);
+  border-color: var(--corvus-focus);
   outline: none;
   box-shadow: 0 0 0 0.22rem var(--corvus-focus);
 }
@@ -96,7 +96,7 @@
 
 .exercise-row {
   min-width: 0;
-  min-height: 5rem;
+  min-height: 5.5rem;
   display: grid;
   grid-template-columns: minmax(12rem, 1fr) minmax(10rem, auto);
   align-items: center;
@@ -118,7 +118,7 @@
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  border: 1px solid #315b3d;
+  border: 1px solid var(--corvus-line-strong);
   border-radius: var(--corvus-radius-sm);
   color: var(--corvus-accent);
   background: var(--corvus-accent-dark);
@@ -132,7 +132,7 @@
   margin: 0;
   overflow-wrap: anywhere;
   color: var(--corvus-text);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.25;
 }
@@ -141,7 +141,7 @@
   display: block;
   margin-top: 0.28rem;
   color: var(--corvus-faint);
-  font-size: 0.67rem;
+  font-size: 0.75rem;
 }
 
 .exercise-row__groups {
@@ -156,9 +156,9 @@
   padding: 0.32rem 0.5rem;
   border: 1px solid var(--corvus-line-strong);
   border-radius: var(--corvus-radius-sm);
-  color: #c2cbc6;
+  color: var(--corvus-text);
   background: var(--corvus-surface-input);
-  font-size: 0.66rem;
+  font-size: 0.75rem;
   line-height: 1;
 }
 
@@ -170,6 +170,7 @@
   padding: 2rem;
   color: var(--corvus-accent);
   text-align: center;
+  color: var(--corvus-text);
 }
 
 .exercise-state strong {
@@ -187,7 +188,7 @@
 
 .exercise-state button,
 .exercise-create__close {
-  min-height: 2.4rem;
+  min-height: 2.75rem;
   border: 1px solid var(--corvus-line-strong);
   border-radius: var(--corvus-radius-sm);
   color: var(--corvus-text);
@@ -247,7 +248,7 @@
 
 .muscle-group-fieldset legend {
   padding: 0;
-  color: #dce2de;
+  color: var(--corvus-text);
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -282,7 +283,7 @@
 }
 
 .muscle-group-options span {
-  min-height: 2.15rem;
+  min-height: 2.75rem;
   display: inline-flex;
   align-items: center;
   padding-inline: 0.65rem;
@@ -299,7 +300,7 @@
 }
 
 .muscle-group-options input:checked + span {
-  border-color: #376846;
+  border-color: var(--corvus-line-strong);
   color: var(--corvus-accent-strong);
   background: var(--corvus-accent-dark);
 }
@@ -320,11 +321,11 @@
 
   .exercise-state button:hover,
   .exercise-create__close:hover {
-    border-color: #526159;
+    border-color: var(--corvus-accent-ink);
   }
 
   .muscle-group-options label:hover span {
-    border-color: #526159;
+    border-color: var(--corvus-accent-ink);
     color: var(--corvus-text);
   }
 }
@@ -396,3 +397,11 @@
     transition: none;
   }
 }
+
+@media (max-width: 40rem) {
+  .exercise-search input {
+    font-size: 1rem;
+  }
+}
+
+.exercise-toolbar { background: var(--corvus-surface-raised); border-radius: 1rem 1rem 0 0; }
