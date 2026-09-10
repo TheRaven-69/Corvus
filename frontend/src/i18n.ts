@@ -1,5 +1,6 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
+import { templateTranslations } from './features/templates/translations'
 
 export const supportedLanguages = ['en', 'uk'] as const
 export type SupportedLanguage = (typeof supportedLanguages)[number]
@@ -9,6 +10,7 @@ const LANGUAGE_STORAGE_KEY = 'corvus.language'
 const resources = {
   en: {
     translation: {
+      templates: templateTranslations.en,
       language: {
         label: 'Language',
         english: 'English',
@@ -63,6 +65,8 @@ const resources = {
       },
       dashboard: {
         navLabel: 'Primary navigation',
+        hideMenu: 'Hide menu',
+        showMenu: 'Show menu',
         nav: {
           dashboard: 'Dashboard',
           training: 'Training',
@@ -189,6 +193,7 @@ const resources = {
   },
   uk: {
     translation: {
+      templates: templateTranslations.uk,
       language: {
         label: 'Мова',
         english: 'Англійська',
@@ -243,6 +248,8 @@ const resources = {
       },
       dashboard: {
         navLabel: 'Основна навігація',
+        hideMenu: 'Сховати меню',
+        showMenu: 'Відкрити меню',
         nav: {
           dashboard: 'Головна',
           training: 'Тренування',

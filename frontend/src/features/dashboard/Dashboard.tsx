@@ -7,15 +7,17 @@ import {
   HouseLineIcon,
   MagnifyingGlassIcon,
   MedalIcon,
+  SignOutIcon,
   NotebookIcon,
 } from '@phosphor-icons/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { User } from '../../api/auth'
 import { CorvusBrand } from '../../components/CorvusBrand'
 import { LanguageSwitcher } from '../../components/LanguageSwitcher'
 import { ExercisesPage } from '../exercises/ExercisesPage'
+import { TemplatesPage } from '../templates/TemplatesPage'
 import './Dashboard.css'
 
 type DashboardProps = {
@@ -28,7 +30,7 @@ type DashboardProps = {
   onSessionExpired: () => void
 }
 
-type DashboardView = 'dashboard' | 'exercises'
+type DashboardView = 'dashboard' | 'exercises' | 'templates'
 
 type IconName =
   | 'calendar'
@@ -71,7 +73,7 @@ const trainingLinks: Array<{
   view?: DashboardView
 }> = [
   { icon: 'dumbbell', translationKey: 'dashboard.nav.workouts' },
-  { icon: 'calendar', translationKey: 'dashboard.nav.templates' },
+  { icon: 'calendar', translationKey: 'dashboard.nav.templates', view: 'templates' },
   {
     icon: 'exercise',
     translationKey: 'dashboard.nav.exercises',
@@ -92,15 +94,39 @@ export function Dashboard({
   onSessionExpired,
 }: DashboardProps) {
   const { t } = useTranslation()
+  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [activeView, setActiveView] = useState<DashboardView>('dashboard')
   const [isExerciseFormOpen, setIsExerciseFormOpen] = useState(false)
+  const [templateDirty, setTemplateDirty] = useState(false)
+  const [templateBusy, setTemplateBusy] = useState(false)
+  useEffect(() => {
+    if (!templateDirty && !templateBusy) return
+    const preventUnload = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = '' }
+    window.addEventListener('beforeunload', preventUnload)
+    return () => window.removeEventListener('beforeunload', preventUnload)
+  }, [templateDirty, templateBusy])
+  function canLeave() {
+    return !templateBusy && (!templateDirty || window.confirm(t('templates.discard')))
+  }
+  function navigate(view: DashboardView) {
+    if (view === activeView || !canLeave()) return
+    setActiveView(view)
+  }
   const volumeScale = t('dashboard.volume.scale', { returnObjects: true }) as string[]
   const weekDays = t('dashboard.volume.days', { returnObjects: true }) as string[]
 
   return (
-    <div className="fitness-dashboard">
-      <aside className="fitness-sidebar">
-        <div className="fitness-brand"><CorvusBrand compact /></div>
+    <div className={`fitness-dashboard${sidebarOpen ? '' : ' fitness-dashboard--collapsed'}`}>
+      <aside className="fitness-sidebar" id="fitness-sidebar">
+        <div className="fitness-brand">
+          <span className="fitness-brand__mobile"><CorvusBrand compact /></span>
+          <button className="sidebar-toggle" type="button" aria-controls="fitness-sidebar" aria-expanded={sidebarOpen}
+            aria-label={t(sidebarOpen ? 'dashboard.hideMenu' : 'dashboard.showMenu')}
+            title={t(sidebarOpen ? 'dashboard.hideMenu' : 'dashboard.showMenu')}
+            onClick={() => setSidebarOpen((open) => !open)}>
+            <CorvusBrand compact />
+          </button>
+        </div>
 
         <nav className="fitness-nav" aria-label={t('dashboard.navLabel')}>
           <button
@@ -111,10 +137,11 @@ export function Dashboard({
             }
             type="button"
             aria-current={activeView === 'dashboard' ? 'page' : undefined}
-            onClick={() => setActiveView('dashboard')}
+            aria-label={t('dashboard.nav.dashboard')} title={t('dashboard.nav.dashboard')}
+            onClick={() => navigate('dashboard')}
           >
             <Icon name="dashboard" />
-            {t('dashboard.nav.dashboard')}
+            <span className="fitness-nav__text">{t('dashboard.nav.dashboard')}</span>
           </button>
 
           <p className="fitness-nav__label">{t('dashboard.nav.training')}</p>
@@ -128,20 +155,22 @@ export function Dashboard({
                 }
                 type="button"
                 aria-current={activeView === link.view ? 'page' : undefined}
+                aria-label={t(link.translationKey)} title={t(link.translationKey)}
                 key={link.translationKey}
-                onClick={() => setActiveView(link.view ?? 'dashboard')}
+                onClick={() => navigate(link.view ?? 'dashboard')}
               >
                 <Icon name={link.icon} />
-                {t(link.translationKey)}
+                <span className="fitness-nav__text">{t(link.translationKey)}</span>
               </button>
             ) : (
               <span
                 className="fitness-nav__link fitness-nav__link--disabled"
                 aria-disabled="true"
+                aria-label={t(link.translationKey)} title={t(link.translationKey)}
                 key={link.translationKey}
               >
                 <Icon name={link.icon} />
-                {t(link.translationKey)}
+                <span className="fitness-nav__text">{t(link.translationKey)}</span>
               </span>
             ),
           )}
@@ -150,7 +179,7 @@ export function Dashboard({
         <div className="fitness-sidebar__footer">
           <span className="fitness-nav__link fitness-nav__link--disabled" aria-disabled="true">
             <Icon name="settings" />
-            {t('dashboard.nav.settings')}
+            <span className="fitness-nav__text">{t('dashboard.nav.settings')}</span>
           </span>
           <div className="fitness-profile">
             <div className="fitness-profile__identity">
@@ -162,8 +191,8 @@ export function Dashboard({
                 <span>@{currentUser.username}</span>
               </div>
             </div>
-            <button type="button" disabled={isLoggingOut} onClick={onLogout}>
-              {isLoggingOut ? t('dashboard.loggingOut') : t('dashboard.logout')}
+            <button type="button" aria-label={isLoggingOut ? t('dashboard.loggingOut') : t('dashboard.logout')} title={t('dashboard.logout')} disabled={isLoggingOut || templateBusy} onClick={() => { if (canLeave()) onLogout() }}>
+              <SignOutIcon size={20} aria-hidden="true" /><span className="fitness-nav__text">{isLoggingOut ? t('dashboard.loggingOut') : t('dashboard.logout')}</span>
             </button>
           </div>
         </div>
@@ -175,12 +204,12 @@ export function Dashboard({
             <h1>
               {activeView === 'dashboard'
                 ? t('dashboard.greeting', { name: currentUser.first_name })
-                : t('exercises.title')}
+                : t(`${activeView}.title`)}
             </h1>
             <span>
               {activeView === 'dashboard'
                 ? t('dashboard.subtitle')
-                : t('exercises.subtitle')}
+                : t(`${activeView}.subtitle`)}
             </span>
           </div>
           <div className="fitness-topbar__actions">
@@ -197,7 +226,7 @@ export function Dashboard({
                   {t('dashboard.startWorkout')}
                 </button>
               </>
-            ) : !isExerciseFormOpen ? (
+            ) : activeView === 'exercises' && !isExerciseFormOpen ? (
               <button
                 className="fitness-primary fitness-primary--enabled"
                 type="button"
@@ -230,7 +259,7 @@ export function Dashboard({
             <div className="dark-empty dark-empty--compact">
               <strong>{t('dashboard.upNext.empty')}</strong>
               <p>{t('dashboard.upNext.hint')}</p>
-              <button type="button" disabled>{t('dashboard.upNext.action')}</button>
+              <button type="button" onClick={() => navigate('templates')}>{t('dashboard.upNext.action')}</button>
             </div>
           </section>
 
@@ -286,6 +315,8 @@ export function Dashboard({
             </div>
           </section>
           </div>
+        ) : activeView === 'templates' ? (
+          <TemplatesPage accessToken={accessToken} onAccessTokenChange={onAccessTokenChange} onSessionExpired={onSessionExpired} onDirtyChange={setTemplateDirty} onBusyChange={setTemplateBusy} />
         ) : (
           <ExercisesPage
             accessToken={accessToken}

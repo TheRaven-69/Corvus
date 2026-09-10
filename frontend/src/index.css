@@ -1,33 +1,37 @@
 :root {
-  font-family: "Roboto Condensed Variable", "Arial Narrow", Arial, sans-serif;
-  color: #f1f3ef;
-  background: #090b0b;
-  color-scheme: dark;
+  font-family: 'DM Sans Variable', Arial, sans-serif;
+  color: #1a1a1a;
+  background: #f2ede5;
+  color-scheme: light;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --corvus-canvas: #090b0b;
-  --corvus-rail: #0d100f;
-  --corvus-surface: #121615;
-  --corvus-surface-raised: #171c1a;
-  --corvus-surface-input: #0c0f0e;
-  --corvus-line: #29302d;
-  --corvus-line-strong: #3a443f;
-  --corvus-text: #f1f3ef;
-  --corvus-muted: #9aa49f;
-  --corvus-faint: #89938e;
-  --corvus-accent: #63d982;
-  --corvus-accent-strong: #7ee397;
-  --corvus-accent-dark: #183c25;
-  --corvus-focus: rgb(99 217 130 / 30%);
-  --corvus-danger: #ff8f8f;
-  --corvus-danger-surface: #2b1718;
-  --corvus-danger-line: #6f3437;
-  --corvus-success-surface: #10281a;
+  --corvus-canvas: #f2ede5;
+  --corvus-rail: #1a1a1a;
+  --corvus-surface: #ffffff;
+  --corvus-surface-raised: #f7f2e9;
+  --corvus-surface-input: #fcfaf6;
+  --corvus-line: #ded8cd;
+  --corvus-line-strong: #857661;
+  --corvus-text: #1a1a1a;
+  --corvus-muted: #716557;
+  --corvus-faint: #716557;
+  --corvus-accent: #c5a84f;
+  --corvus-accent-strong: #d4b855;
+  --corvus-accent-dark: #393221;
+  --corvus-accent-ink: #705414;
+  --corvus-on-accent: #1a1a1a;
+  --corvus-on-dark: #f5f0e8;
+  --corvus-focus: #896a1c;
+  --corvus-danger: #922d20;
+  --corvus-danger-surface: #fff0ec;
+  --corvus-danger-line: #dcafa5;
+  --corvus-success: #28502b;
+  --corvus-success-surface: #e2ecdf;
   --corvus-radius-sm: 0.5rem;
-  --corvus-radius-md: 0.75rem;
+  --corvus-radius-md: 1rem;
   --corvus-radius-lg: 1rem;
   --corvus-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
@@ -39,18 +43,18 @@
 }
 
 html {
-  min-width: 20rem;
   background: var(--corvus-canvas);
 }
 
 body {
-  min-width: 20rem;
   min-height: 100vh;
   margin: 0;
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -60,11 +64,11 @@ a {
 }
 
 input {
-  caret-color: var(--corvus-accent);
+  caret-color: var(--corvus-accent-ink);
 }
 
 ::selection {
-  color: #071009;
+  color: var(--corvus-on-accent);
   background: var(--corvus-accent);
 }
 
