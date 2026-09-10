@@ -41,7 +41,6 @@ sets, and completing it. History and exercise progress follow that flow.
 Corvus/
 ├── backend/              FastAPI, migrations, tests, compose.yaml
 ├── frontend/             React client, styles, and behavior tests
-├── docs/reviews/          review notes (historical findings and follow-ups)
 ├── .github/workflows/    backend and frontend CI
 └── README.md
 ```
