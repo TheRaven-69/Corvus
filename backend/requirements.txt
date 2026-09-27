@@ -3,7 +3,7 @@ fastapi
 uvicorn[standard]
 psycopg[binary]
 pydantic-settings
-sqlalchemy
+sqlalchemy[asyncio]
 pwdlib[argon2]
 PyJWT
 python-multipart
