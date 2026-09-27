@@ -11,6 +11,22 @@ from app.services.exceptions.exercise import (
     ExerciseServiceError,
     UnknownMuscleGroupsError,
 )
+from app.services.exceptions.workout_session import (
+    ActiveWorkoutSessionExistsError,
+    InvalidWorkoutSessionExerciseOrderError,
+    InvalidWorkoutSessionSetError,
+    InvalidWorkoutTemplateError,
+    WorkoutSessionCancellationNotAllowedError,
+    WorkoutSessionCompletionNotAllowedError,
+    WorkoutSessionExerciseDeletionNotAllowedError,
+    WorkoutSessionExerciseNotFoundError,
+    WorkoutSessionExerciseReplacementNotAllowedError,
+    WorkoutSessionNotActiveError,
+    WorkoutSessionNotFoundError,
+    WorkoutSessionServiceError,
+    WorkoutSessionSetDeletionNotAllowedError,
+    WorkoutSessionSetNotFoundError,
+)
 from app.services.exceptions.workout_template import (
     UnavailableExercisesError,
     WorkoutTemplateNotFoundError,
@@ -18,16 +34,30 @@ from app.services.exceptions.workout_template import (
 )
 
 __all__ = [
+    "ActiveWorkoutSessionExistsError",
     "AuthServiceError",
     "EmailAlreadyExistsError",
     "ExerciseServiceError",
     "InvalidAccessTokenError",
     "InvalidCredentialsError",
     "InvalidRefreshTokenError",
+    "InvalidWorkoutSessionExerciseOrderError",
+    "InvalidWorkoutSessionSetError",
+    "InvalidWorkoutTemplateError",
     "UnavailableExercisesError",
     "UnknownMuscleGroupsError",
     "UserAlreadyExistsError",
     "UsernameAlreadyExistsError",
+    "WorkoutSessionCancellationNotAllowedError",
+    "WorkoutSessionCompletionNotAllowedError",
+    "WorkoutSessionExerciseDeletionNotAllowedError",
+    "WorkoutSessionExerciseNotFoundError",
+    "WorkoutSessionExerciseReplacementNotAllowedError",
+    "WorkoutSessionNotActiveError",
+    "WorkoutSessionNotFoundError",
+    "WorkoutSessionServiceError",
+    "WorkoutSessionSetDeletionNotAllowedError",
+    "WorkoutSessionSetNotFoundError",
     "WorkoutTemplateNotFoundError",
     "WorkoutTemplateServiceError",
 ]
